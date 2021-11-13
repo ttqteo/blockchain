@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> METAMASK </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style_signin.css">
+        <script>
+            function Redirect() {
+                window.location = "https://www.google.com"
+            }
+
+        </script>
+    </head>
+    <body>
+        <div class="body">
+        <script language="javascript" src="check_account.js"></script>
+        <form action="" method="POST" onsubmit="return validate()">
+            
+                <div class="bar">
+                    <img class="logo" src="image/logo.png">
+                </div>
+                <div class="main">
+                    <img class = "main_logo" src="image/signin.png">
+                </div>
+                <div class="register">
+                    <hr>
+                        <label class = "user" for="username"><b>Email hoặc tên đăng nhập</b></label>
+                        <input type="text" placeholder="ex: username" name="username" id="username">
+                        <label class = "pass" for="password"><b>Mật khẩu</b></label>
+                        <input type="password" placeholder="******" name="password" id="password">
+                    <hr>
+                </div>
+        </form>
+        <div class="button">
+            <input class = "new" type="button" value="Đăng nhập" onclick="Redirect();"/>
+        </div>
+        <div class="last">
+            <h3>(C) 2021. Bản quyền thuộc về nhóm 16, lập trình Java - FETEL HCMUS</h3>
+        </div>
+    </div>
+    </body>
+</html>

@@ -1,0 +1,264 @@
+
+* {
+    margin:0;
+    padding:0;
+}
+.body {
+    font-family: 'Roboto', sans-serif;
+    width: 940px;
+    height: 1080px;
+    margin: 0 auto;
+    top: 0px;
+    padding:0;
+
+}
+/* .body {
+    background: #333333; */
+/* } */
+li {
+    list-style: none;
+}
+.bar {
+    position: relative;
+}
+.bar img{
+    position: absolute;
+    width: 219px;
+    height: 59px;
+    left: 0px;
+    top: 12px;
+    right: 0px;
+    padding: 10px;
+}
+ .bar input.signin {
+    position: absolute;
+    width: 77px;
+    height: 21px;
+    right: 166px;
+    top: 33px;
+    background-color: white;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: center;
+    color: #0074CC;
+    border: none;
+    text-decoration-line: underline;
+    cursor: pointer;
+}
+.bar input.signin:hover{
+    opacity: 1;
+}
+
+.bar input.signup {
+
+    width: 117px;
+    height: 32px;
+    right: 32px;
+    top: 27px;
+    background-color: #0074CC;
+    border-radius: 20px;
+    position: absolute;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 27px;
+    text-align: center;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+.bar input.signup:hover{
+    opacity: 1;
+}
+.part1 {
+    position: relative;
+    top: 103px;
+    width: 940px;
+    height: 330px;
+}
+.part1 .trai {
+    /* position: absolute; */
+    width: 470px;
+    height: 330px;
+    top: 0px; 
+    float: left;
+
+}
+.part1 .phai {
+
+    position: absolute;
+    width: 470px;
+    height: 330px;
+    top: 0px;
+    right: 0px;
+    float: right;
+    
+}
+.part1 .phai h1 {
+    position: absolute;
+    width: 350px;
+    height: 136px;
+    top: 97px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 37px;
+    color: #333333;
+    margin: 0 auto;
+    left: 35px;
+    
+}
+.part1 .phai h2{
+    position: absolute;
+    width: 400px;
+    height: 136px;
+    bottom: 97px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 25px;
+    color: #333333;
+    bottom: 20px;
+    left: 35px;
+
+}
+.phai input.sub-signup {
+    position: absolute;
+    width: 208px;
+    height: 41px;
+    left: 35px;
+    top: 250px;
+    background: #0074CC;
+    border-radius: 20px;
+    position: absolute;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 40px;
+    text-align: center;
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+}
+.phai input.sub-signup{
+    opacity: 1;
+}
+.part1 .trai img {
+    position: absolute;
+    top: 9px;
+    width: 392px;
+    left: 50px;
+    height: 313px;
+}
+.sub-logo-2 {
+    position: relative;
+}
+.sub-logo-2 img{
+    position: absolute;
+    width: 280px;
+    height: 278px;
+    right: 94px;
+    top: 129px;
+
+}
+.sub-logo-2 h1{
+    position: absolute;
+    width: 374px;
+    height: 124px;
+    left: 60px;
+    top: 198px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 37px;
+    color: #333333;
+}
+.sub-logo-2 h2{
+    position: absolute;
+    width: 374px;
+    height: 124px;
+    left: 60px;
+    top: 250px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 25px;
+    color: #333333;
+}
+.sub-logo-3{
+    position: relative;
+}
+.sub-logo-3 img{
+    position: absolute;
+    width: 338px;
+    height: 258px;
+    right: 65px;
+    top: 469px;
+
+}
+.sub-logo-3 h1.fst{
+    position: absolute;
+    width: 350px;
+    height: 202px;
+    left: 60px;
+    top: 497px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 37px;
+    color: #333333;
+    text-align: justify;
+}
+.sub-logo-3 h1.sc{
+    position: absolute;
+    width: 413px;
+    height: 202px;
+    left: 60px;
+    top: 590px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 25px;
+    color: #333333;
+    text-align: justify;
+}
+.sub-logo-3 h2.fst{
+    position: absolute;
+    width: 413px;
+    height: 202px;
+    left: 60px;
+    top: 540px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 25px;
+    color: #333333;
+    text-align: justify;
+}
+.sub-logo-3 h2.sc{
+    position: absolute;
+    width: 413px;
+    height: 202px;
+    left: 60px;
+    top: 633px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 25px;
+    color: #333333;
+    text-align: justify;
+}
+.sub-logo-3 h3{
+    position: absolute;
+    left: 15%;
+    top: 774px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 16px;
+    text-align: center;
+    
+    color: rgba(51, 51, 51, 0.6);
+}
