@@ -63,7 +63,7 @@ const Wrapper = styled.div`
     .header {
       &__right {
         height: 40px;
-        width: 100%;
+        width: auto;
       }
       &__left {
         .home {

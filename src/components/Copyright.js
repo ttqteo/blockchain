@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const CopyrightWrapper = styled.div`
-  padding: 4px 16px;
+  padding: 16px 16px;
   font-size: 16px;
   line-height: 20px;
   color: rgba(51, 51, 51, 0.6);

@@ -48,10 +48,10 @@ const Row = styled.div`
     .text .message {
       font-size: 20px;
       line-height: 20px;
+      padding-right: 8px;
     }
     .date {
       font-size: 14px;
-
     }
     .text {
       font-size: 14px;
