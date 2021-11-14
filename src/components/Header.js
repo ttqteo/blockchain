@@ -74,7 +74,7 @@ export default function Header() {
   return (
     <div style={{ width: "100%" }}>
       <Wrapper className="header">
-        <Link to="/">
+        <Link to="/home">
           <img src={logoName} style={{ height: "60px" }} className="img" />
         </Link>
         <div className="header__left">
