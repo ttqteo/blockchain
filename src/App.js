@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import "antd/dist/antd.css";
 import Header from "./components/Header";
+import Copyright from "./components/Copyright";
 import Dashboard from "./pages/Dashboard";
 import Buy from "./pages/Buy";
 import Send from "./pages/Send";
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
+      <Copyright />
     </div>
   );
 }

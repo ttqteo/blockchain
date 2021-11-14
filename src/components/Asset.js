@@ -29,6 +29,11 @@ const Row = styled.div`
     line-height: 32px;
     font-weight: bold;
   }
+  @media (max-width: 768px) {
+    .text .token {
+      font-size: 24px;
+      line-height: 28px;
+    }
 `;
 
 export default function Asset({ name, value }) {

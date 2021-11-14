@@ -4,12 +4,15 @@ import { Button } from "antd";
 import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
-  width: 874px;
+  max-width: 874px;
   margin: 8px auto 0;
   background-color: #fff;
   border-radius: 20px;
   border: 2px solid #ccc;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  @media (max-width: 768px) {
+    margin: 0 auto;
+  }
 `;
 
 const HeadingWrapper = styled.div`
@@ -36,6 +39,12 @@ const HeadingWrapper = styled.div`
   }
   .back:hover {
     filter: brightness(1.1);
+  }
+  @media (max-width: 375px) {
+    .back {
+      font-size: 18px;
+      right: 20px;
+    }
   }
 `;
 

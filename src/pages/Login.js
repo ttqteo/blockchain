@@ -17,7 +17,7 @@ const LoginWrapper = styled.div`
     max-height: 258px;
   }
   .text {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: bold;
     margin-bottom: 32px;
   }

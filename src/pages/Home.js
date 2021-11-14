@@ -8,38 +8,39 @@ import img3 from "../assets/homepage_3.png";
 
 const HomeWrapper = styled.div`
   margin: 0 auto;
-  .copyright {
-    padding: 10px 0;
-    font-size: 16px;
-    line-height: 20px;
-    color: rgba(51, 51, 51, 0.6);
-    text-align: center;
+  @media (max-width: 768px) {
+    .even {
+      flex-direction: column-reverse;
+    }
   }
 `;
 
 const RowWrapper = styled.div`
   display: flex;
+  justify-content: center;
   margin-bottom: 32px;
   .img {
-    width: 470px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    max-width: 470px;
+    padding: 0 40px;
+    &__home {
+      width: 100%;
+      height: 100%;
+    }
   }
   .text {
-    width: 470px;
+    max-width: 470px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
     .heading {
-      width: 400px;
+      max-width: 400px;
       font-size: 28px;
       line-height: 38px;
       font-weight: bold;
     }
     .description {
-      width: 400px;
+      max-width: 400px;
       margin: 16px 0 32px;
       font-size: 18px;
       line-height: 24px;
@@ -55,6 +56,28 @@ const RowWrapper = styled.div`
       filter: brightness(1.1);
     }
   }
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    .img {
+      max-width: 300px;
+    }
+    .text {
+      padding: 0 16px;
+      align-items: center;
+      margin-top: 24px;
+      .heading,
+      .description {
+        text-align: center;
+      }
+      .heading {
+        font-size: 26px;
+      }
+      .description {
+        font-size: 16px;
+      }
+    }
+  }
 `;
 
 export default function Home() {
@@ -62,7 +85,7 @@ export default function Home() {
     <HomeWrapper>
       <RowWrapper>
         <div className="img">
-          <img src={img1} />
+          <img src={img1} className="img__home" />
         </div>
         <div className="text">
           <span className="heading">
@@ -80,7 +103,7 @@ export default function Home() {
           </Link>
         </div>
       </RowWrapper>
-      <RowWrapper>
+      <RowWrapper className="even">
         <div className="text">
           <span className="heading"> Mua, bán và chuyển đổi </span>
           <span className="description">
@@ -90,12 +113,12 @@ export default function Home() {
           </span>
         </div>
         <div className="img">
-          <img src={img2} />
+          <img src={img2} className="img__home" />
         </div>
       </RowWrapper>
       <RowWrapper>
         <div className="img">
-          <img src={img3} />
+          <img src={img3} className="img__home" />
         </div>
         <div className="text">
           <span className="heading"> Sở hữu dữ liệu của bạn </span>
@@ -107,9 +130,6 @@ export default function Home() {
           <span className="description"> Kết nối với chúng tôi </span>
         </div>
       </RowWrapper>
-      <div className="copyright">
-        (C) 2021. Bản quyền thuộc về nhóm 16, lập trình Java - FETEL HCMUS
-      </div>
     </HomeWrapper>
   );
 }

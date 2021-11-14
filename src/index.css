@@ -43,3 +43,10 @@ table {
 #root {
 	width: calc(100vw - 10px);
 }
+
+@media (max-width: 768px) {
+	#root {
+
+		width: 100vw;
+	}
+}

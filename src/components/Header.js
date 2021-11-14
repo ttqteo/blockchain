@@ -13,8 +13,9 @@ const Wrapper = styled.div`
   margin: 0 auto;
   padding: 0 16px;
   .header {
-    .img {
-      cursor: pointer;
+    &__right {
+      height: 60px;
+      width: 100%;
     }
     &__left {
       display: flex;
@@ -56,6 +57,34 @@ const Wrapper = styled.div`
   .userLogo.disabled {
     display: none;
   }
+  @media (max-width: 768px) {
+    height: 60px;
+
+    .header {
+      &__right {
+        height: 40px;
+        width: 100%;
+      }
+      &__left {
+        .home {
+          &__text {
+            display: none;
+          }
+          &__button {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    .header {
+      &__left {
+        .button {
+          display: none;
+        }
+      }
+  }
 `;
 
 export default function Header() {
@@ -75,14 +104,14 @@ export default function Header() {
     <div style={{ width: "100%" }}>
       <Wrapper className="header">
         <Link to="/home">
-          <img src={logoName} style={{ height: "60px" }} className="img" />
+          <img src={logoName} className="header__right" />
         </Link>
         <div className="header__left">
           <div className="home">
             <Link to="/login">
-              <span className="home__text">Đã có ví ?</span>
+              <span className="home__text">Chưa có ví ?</span>
               <Button className="home__button" type="primary" shape="round">
-                Tạo ví mới
+                Đăng nhập
               </Button>
             </Link>
           </div>

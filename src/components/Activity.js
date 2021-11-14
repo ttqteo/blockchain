@@ -34,8 +34,28 @@ const Row = styled.div`
     font-size: 18px;
     font-style: italic;
     font-weight: medium;
-    width: 300px;
+    max-width: 300px;
   }
+  @media (max-width: 768px) {
+    .text .message {
+      font-size: 24px;
+      line-height: 28px;
+    }
+    .date {
+      font-size: 14px;
+    }
+  @media (max-width: 375px) {
+    .text .message {
+      font-size: 20px;
+      line-height: 20px;
+    }
+    .date {
+      font-size: 14px;
+
+    }
+    .text {
+      font-size: 14px;
+    }
 `;
 
 export default function Activity({

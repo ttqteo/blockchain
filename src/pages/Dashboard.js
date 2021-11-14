@@ -8,14 +8,17 @@ import Activity from "../components/Activity.js";
 import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
-  width: 874px;
-  height: calc(100vh - 88px);
+  max-width: 874px;
+  height: 100%;
   margin: 8px auto 0;
   background-color: #fff;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   border: 2px solid #ccc;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  @media (max-width: 768px) {
+    margin: 0 auto;
+  }
 `;
 
 const PublicKey = styled.div`
