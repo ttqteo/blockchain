@@ -3,7 +3,16 @@ import React from "react";
 import styled from "styled-components";
 import logo from "../assets/logo.png";
 import googleLogo from "../assets/google.png";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import { addDocument } from "../firebase/services";
+
+import { auth } from "../firebase/config";
+
+import {
+  signInWithPopup,
+  getAdditionalUserInfo,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 const LoginWrapper = styled.div`
   max-width: 940px;
@@ -38,18 +47,42 @@ const LoginWrapper = styled.div`
     }
   }
 `;
+const googleProvider = new GoogleAuthProvider();
 
 export default function Login() {
+
+  const handleLogin = async (provider) => {
+    await signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        const data = getAdditionalUserInfo(result);
+        console.log("Đăng nhập")
+        if (data?.isNewUser) {
+          addDocument("users", {
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            uid: user.uid,
+            providerId: user.providerId,
+            balance: 100,
+          });
+        }
+      })
+      .catch((error) => {console.log("Error Login!!!",error)});
+  };
+
   return (
     <LoginWrapper>
-      <img src={logo} className="img" />
+      <img src={logo} className="img" alt="logo" />
       <span className="text">Chào mừng bạn trở lại !</span>
-      <Link to="/">
-        <Button className="button" type="ghost" shape="round">
-          <img src={googleLogo} className="logo" />
+      {/* <Link to="/"> */}
+        <Button className="button" type="ghost" shape="round"
+          onClick={() => handleLogin(googleProvider)}
+        >
+          <img src={googleLogo} className="logo" alt="google" />
           Đăng nhập bằng Google
         </Button>
-      </Link>
+      {/* </Link> */}
     </LoginWrapper>
   );
 }

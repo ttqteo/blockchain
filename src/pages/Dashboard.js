@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
-import { user } from "../config/api.js";
+// import { user } from "../firebase/api.js";
 import eth from "../assets/eth_logo.png";
 import Asset from "../components/Asset.js";
 import Activity from "../components/Activity.js";
 import { Link } from "react-router-dom";
-
+import {auth} from "../firebase/config";
+import { useNavigate } from 'react-router-dom';  
+import { AuthContext } from "../Context/AuthProvider";
 const Wrapper = styled.div`
   max-width: 874px;
   height: 100%;
@@ -162,6 +164,10 @@ const AAWrapper = styled.div`
 `;
 
 export default function Dashboard() {
+  let {
+    user: { displayName, uid, balance},
+  } = useContext(AuthContext);
+  const exchangeRateUTHToUsd = 4158.45;
   const handleClickHeading = (e) => {
     document
       .querySelectorAll(".heading .title")
@@ -178,22 +184,24 @@ export default function Dashboard() {
       }
     });
   };
+
   return (
+   
     <Wrapper>
       <PublicKey>
         <div className="info">
-          <span className="name">{user.name}</span>
-          <span className="key">
-            0x{user.publicKey.substring(0, 4)}...
-            {user.publicKey.substring(30, 34)}
-          </span>
+          <span className="name"> {displayName} </span>
+          <span className="key"> {uid} </span>
+          <Button
+            onClick={()=>auth.signOut()}
+           >thoát</Button>
         </div>
       </PublicKey>
       <FunctionWrapper>
         <div className="summary">
-          <img className="img" src={eth} />
-          <span className="eth">2.45 ETH</span>
-          <span className="usd">$ 81.000 USD</span>
+          <img className="img" src={eth} alt='' />
+          <span className="eth">{balance} ETH</span>
+          <span className="usd">{balance*exchangeRateUTHToUsd} USD</span>
         </div>
         <div className="function">
           <Link to="/buy" className="item">

@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import { AuthContext } from "../Context/AuthProvider";
 import styled from "styled-components";
 import logoName from "../assets/logo_name.png";
 import { Avatar, Button } from "antd";
@@ -88,6 +89,10 @@ const Wrapper = styled.div`
 `;
 
 export default function Header() {
+  let {
+    user: { photoURL, displayName },
+  } = useContext(AuthContext);
+
   let location = useLocation();
   useEffect(() => {
     document
@@ -104,7 +109,7 @@ export default function Header() {
     <div style={{ width: "100%" }}>
       <Wrapper className="header">
         <Link to="/home">
-          <img src={logoName} className="header__right" />
+          <img src={logoName} className="header__right" alt="" />
         </Link>
         <div className="header__left">
           <div className="home">
@@ -119,11 +124,9 @@ export default function Header() {
             <Button type="ghost" shape="round" className="button">
               Etherum Mainnet
             </Button>
-            <Avatar
-              className="userLogo"
-              size={40}
-              icon={<i className="fas fa-user"></i>}
-            />
+            <Avatar src={photoURL} className="userLogo" size={40}>
+              {photoURL ? "" : displayName?.charAt(0)?.toUpperCase()}
+            </Avatar>
           </div>
         </div>
       </Wrapper>

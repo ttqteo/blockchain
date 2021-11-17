@@ -39,7 +39,7 @@ const Row = styled.div`
 export default function Asset({ name, value }) {
   return (
     <Row>
-      <img src={ETH} className="img" />
+      <img src={ETH} className="img" alt=""/>
       <div className="text">
         <span className="token">
           {" "}

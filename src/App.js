@@ -10,20 +10,24 @@ import Send from "./pages/Send";
 import Swap from "./pages/Swap";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import AuthProvider from "./Context/AuthProvider";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/buy" element={<Buy />} />
-          <Route path="/send" element={<Send />} />
-          <Route path="/swap" element={<Swap />} />
-          <Route path="/" element={<Dashboard />} />
-        </Routes>
+        <AuthProvider>
+          <Header />
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/buy" element={<Buy />} />
+            <Route path="/send" element={<Send />} />
+            <Route path="/swap" element={<Swap />} />
+            <Route path="/" element={<Dashboard />} />
+          </Routes>
+        </AuthProvider>
+            
       </BrowserRouter>
       <Copyright />
     </div>

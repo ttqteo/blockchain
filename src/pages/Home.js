@@ -85,7 +85,7 @@ export default function Home() {
     <HomeWrapper>
       <RowWrapper>
         <div className="img">
-          <img src={img1} className="img__home" />
+          <img src={img1} className="img__home" alt="" />
         </div>
         <div className="text">
           <span className="heading">
@@ -113,12 +113,12 @@ export default function Home() {
           </span>
         </div>
         <div className="img">
-          <img src={img2} className="img__home" />
+          <img src={img2} className="img__home" alt="" />
         </div>
       </RowWrapper>
       <RowWrapper>
         <div className="img">
-          <img src={img3} className="img__home" />
+          <img src={img3} className="img__home" alt="" />
         </div>
         <div className="text">
           <span className="heading"> Sở hữu dữ liệu của bạn </span>

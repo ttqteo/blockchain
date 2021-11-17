@@ -126,7 +126,7 @@ export default function Swap() {
       <HeadingWrapper>
         <span className="name">Chuyển</span>
         <Link to="/" className="back">
-          <i class="fas fa-angle-left back-icon"></i>Quay lại
+          <i className="fas fa-angle-left back-icon"></i>Quay lại
         </Link>
       </HeadingWrapper>
       <FunctionWrapper>
@@ -134,7 +134,7 @@ export default function Swap() {
           <span className="heading">Chuyển từ</span>
           <TokenInputWrapper>
             <div className="typeToken">
-              <img className="img" src={eth} />
+              <img className="img" src={eth} alt="" />
               <span className="name">ETH</span>
             </div>
             <Input className="inputType" placeholder="Số lượng Token" />
@@ -145,7 +145,7 @@ export default function Swap() {
           <span className="heading">Thành</span>
           <TokenInputWrapper>
             <div className="typeToken">
-              <img className="img" src={eth} />
+              <img className="img" src={eth} alt=""/>
               <span className="name">ETH</span>
             </div>
             <Input className="inputType" placeholder="Số lượng Token" />

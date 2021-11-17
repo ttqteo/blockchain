@@ -68,7 +68,7 @@ export default function Activity({
 }) {
   return (
     <Row>
-      <img src={ETH} className="img" />
+      <img src={ETH} className="img" alt="logo"/>
       <div className="text">
         <span className="message">
           Bạn đã{" "}
