@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
-import { user } from "../config/api.js";
+// import { user } from "../firebase/api.js";
 import eth from "../assets/eth_logo.png";
 import Asset from "../components/Asset.js";
 import Activity from "../components/Activity.js";
 import { Link } from "react-router-dom";
-
+import {auth} from "../firebase/config";
+import { useNavigate } from 'react-router-dom';  
+import { AuthContext } from "../Context/AuthProvider";
 const Wrapper = styled.div`
   width: 874px;
   height: calc(100vh - 88px);
@@ -159,6 +161,10 @@ const AAWrapper = styled.div`
 `;
 
 export default function Dashboard() {
+  let {
+    user: { displayName, photoURL, uid },
+  } = useContext(AuthContext);
+
   const handleClickHeading = (e) => {
     document
       .querySelectorAll(".heading .title")
@@ -175,20 +181,26 @@ export default function Dashboard() {
       }
     });
   };
+
   return (
+   
     <Wrapper>
       <PublicKey>
         <div className="info">
-          <span className="name">{user.name}</span>
-          <span className="key">
-            0x{user.publicKey.substring(0, 4)}...
-            {user.publicKey.substring(30, 34)}
+          <span className="name">{displayName}</span>
+          <span className="key">123456
+          {uid}
+            {/* 0x{user.publicKey.substring(0, 4)}...
+            {user.publicKey.substring(30, 34)} */}
           </span>
+          <Button
+            onClick={()=>auth.signOut()}
+           >thoát</Button>
         </div>
       </PublicKey>
       <FunctionWrapper>
         <div className="summary">
-          <img className="img" src={eth} />
+          <img className="img" src={eth} alt='' />
           <span className="eth">2.45 ETH</span>
           <span className="usd">$ 81.000 USD</span>
         </div>

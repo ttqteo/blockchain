@@ -124,12 +124,12 @@ const TokenInputWrapper = styled.div`
 `;
 
 export default function Send() {
-  return (
+  return (  
     <Wrapper>
       <HeadingWrapper>
         <span className="name">Gửi</span>
         <Link to="/" className="back">
-          <i class="fas fa-angle-left back-icon"></i>Quay lại
+          <i className="fas fa-angle-left back-icon"></i>Quay lại
         </Link>
       </HeadingWrapper>
       <FunctionWrapper>
@@ -139,7 +139,7 @@ export default function Send() {
         </InputWrapper>
         <TokenInputWrapper>
           <div className="typeToken">
-            <img className="img" src={eth} />
+            <img className="img" src={eth} alt=""/>
             <span className="name">ETH</span>
           </div>
           <Input className="inputType" placeholder="Số lượng Token" />
