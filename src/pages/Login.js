@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import logo from "../assets/logo.png";
 import googleLogo from "../assets/google.png";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { addDocument } from "../firebase/services";
 
 import { auth } from "../firebase/config";
@@ -68,7 +68,7 @@ export default function Login() {
           });
         }
       })
-      .catch((error) => {console.log("Lỗi123",error)});
+      .catch((error) => {console.log("Error Login!!!",error)});
   };
 
   return (

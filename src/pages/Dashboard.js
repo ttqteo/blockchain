@@ -162,9 +162,9 @@ const AAWrapper = styled.div`
 
 export default function Dashboard() {
   let {
-    user: { displayName, photoURL, uid },
+    user: { displayName, uid, balance},
   } = useContext(AuthContext);
-
+  const exchangeRateUTHToUsd = 4158.45;
   const handleClickHeading = (e) => {
     document
       .querySelectorAll(".heading .title")
@@ -187,12 +187,8 @@ export default function Dashboard() {
     <Wrapper>
       <PublicKey>
         <div className="info">
-          <span className="name">{displayName}</span>
-          <span className="key">123456
-          {uid}
-            {/* 0x{user.publicKey.substring(0, 4)}...
-            {user.publicKey.substring(30, 34)} */}
-          </span>
+          <span className="name"> {displayName} </span>
+          <span className="key"> {uid} </span>
           <Button
             onClick={()=>auth.signOut()}
            >thoát</Button>
@@ -201,8 +197,8 @@ export default function Dashboard() {
       <FunctionWrapper>
         <div className="summary">
           <img className="img" src={eth} alt='' />
-          <span className="eth">2.45 ETH</span>
-          <span className="usd">$ 81.000 USD</span>
+          <span className="eth">{balance} ETH</span>
+          <span className="usd">{balance*exchangeRateUTHToUsd} USD</span>
         </div>
         <div className="function">
           <Link to="/buy" className="item">
