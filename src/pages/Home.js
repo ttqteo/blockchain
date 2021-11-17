@@ -124,7 +124,7 @@ export default function Home() {
           <span className="heading"> Sở hữu dữ liệu của bạn </span>
           <span className="description">
             {" "}
-            Tài khoản ví và tài khoản đăng nhập là của bạ{" "}
+            Tài khoản ví và tài khoản đăng nhập là của bạn{" "}
           </span>
           <span className="heading"> Chương trình mã nguồn mở </span>
           <span className="description"> Kết nối với chúng tôi </span>
