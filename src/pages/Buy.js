@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
@@ -76,7 +76,7 @@ const FunctionWrapper = styled.div`
   .usdController .plus:hover {
     filter: brightness(1.1);
   }
-  .usdController .money {
+  .usdController #money {
     font-size: 40px;
     font-weight: bold;
     margin: 0 16px;
@@ -94,12 +94,14 @@ const FunctionWrapper = styled.div`
 `;
 
 export default function Buy() {
+  const [cash, setCash] = useState(0);
+
   return (
     <Wrapper>
       <HeadingWrapper>
         <span className="name">Mua</span>
         <Link to="/" className="back">
-          <i class="fas fa-angle-left back-icon"></i>Quay lại
+          <i className="fas fa-angle-left back-icon"></i>Quay lại
         </Link>
       </HeadingWrapper>
       <FunctionWrapper>
@@ -110,22 +112,24 @@ export default function Buy() {
             type="ghost"
             shape="circle"
             className="minus"
-            icon={<i class="fas fa-minus"></i>}
+            icon={<i className="fas fa-minus"></i>}
+            onClick={() => setCash(cash - 1)}
           />
-          <span className="money">$0.00</span>
+          <span id="money">$ {cash}</span>
           <Button
             size="large"
             type="primary"
             shape="circle"
             className="plus"
-            icon={<i class="fas fa-plus"></i>}
+            icon={<i className="fas fa-plus"></i>}
+            onClick={() => setCash(cash + 1)}
           />
         </div>
         <Button
           size="large"
           type="primary"
           shape="round"
-          className="end-button "
+          className="end-button"
         >
           Hoàn tất
         </Button>

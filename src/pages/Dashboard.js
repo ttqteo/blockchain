@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 // import { user } from "../firebase/api.js";
@@ -6,9 +6,9 @@ import eth from "../assets/eth_logo.png";
 import Asset from "../components/Asset.js";
 import Activity from "../components/Activity.js";
 import { Link } from "react-router-dom";
-import {auth} from "../firebase/config";
-import { useNavigate } from 'react-router-dom';  
-import { AuthContext } from "../Context/AuthProvider";
+import { auth } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
+import { useAuthState, AuthContext } from "../Context/AuthProvider";
 const Wrapper = styled.div`
   max-width: 874px;
   height: 100%;
@@ -164,8 +164,10 @@ const AAWrapper = styled.div`
 `;
 
 export default function Dashboard() {
+  let navigate = useNavigate();
+
   let {
-    user: { displayName, uid, balance},
+    user: { displayName, uid, balance },
   } = useContext(AuthContext);
   const exchangeRateUTHToUsd = 4158.45;
   const handleClickHeading = (e) => {
@@ -186,22 +188,18 @@ export default function Dashboard() {
   };
 
   return (
-   
     <Wrapper>
       <PublicKey>
         <div className="info">
           <span className="name"> {displayName} </span>
           <span className="key"> {uid} </span>
-          <Button
-            onClick={()=>auth.signOut()}
-           >thoát</Button>
         </div>
       </PublicKey>
       <FunctionWrapper>
         <div className="summary">
-          <img className="img" src={eth} alt='' />
+          <img className="img" src={eth} alt="" />
           <span className="eth">{balance} ETH</span>
-          <span className="usd">{balance*exchangeRateUTHToUsd} USD</span>
+          <span className="usd">{balance * exchangeRateUTHToUsd} USD</span>
         </div>
         <div className="function">
           <Link to="/buy" className="item">
@@ -209,7 +207,7 @@ export default function Dashboard() {
               type="primary"
               shape="circle"
               size="large"
-              icon={<i class="fas fa-dollar-sign"></i>}
+              icon={<i className="fas fa-dollar-sign"></i>}
               className="function-button"
             />
             <span>Mua</span>
@@ -219,7 +217,7 @@ export default function Dashboard() {
               type="primary"
               shape="circle"
               size="large"
-              icon={<i class="far fa-paper-plane"></i>}
+              icon={<i className="far fa-paper-plane"></i>}
               className="function-button"
             />
             <span>Gửi</span>
@@ -229,7 +227,7 @@ export default function Dashboard() {
               type="primary"
               shape="circle"
               size="large"
-              icon={<i class="fas fa-sync-alt"></i>}
+              icon={<i className="fas fa-sync-alt"></i>}
               className="function-button"
             />
             <span>Đổi</span>

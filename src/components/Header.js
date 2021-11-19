@@ -1,9 +1,10 @@
-import React, { useEffect, useContext } from "react";
-import { AuthContext } from "../Context/AuthProvider";
+import React, { useEffect, useContext, useState } from "react";
+import { AuthContext, useAuthState } from "../Context/AuthProvider";
 import styled from "styled-components";
 import logoName from "../assets/logo_name.png";
 import { Avatar, Button } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { auth } from "../firebase/config";
 
 const Wrapper = styled.div`
   height: 80px;
@@ -89,6 +90,14 @@ const Wrapper = styled.div`
 `;
 
 export default function Header() {
+  let navigate = useNavigate();
+  const { isAuthenticated } = useAuthState();
+
+  useEffect(() => {
+    if (isAuthenticated) navigate("/");
+    else navigate("/home");
+  }, [isAuthenticated]);
+
   let {
     user: { photoURL, displayName },
   } = useContext(AuthContext);
@@ -97,18 +106,26 @@ export default function Header() {
   useEffect(() => {
     document
       .querySelector(".header .userLogo")
-      .classList.toggle("disabled", !(location.pathname === "/"));
+      .classList.toggle(
+        "disabled",
+        location.pathname === "/home" || location.pathname === "/login"
+      );
+
     document
       .querySelector(".header .button")
-      .classList.toggle("disabled", location.pathname === "/home");
+      .classList.toggle(
+        "disabled",
+        location.pathname === "/home" || location.pathname === "/login"
+      );
     document
       .querySelector(".header__left .home")
       .classList.toggle("disabled", !(location.pathname === "/home"));
   }, [location]);
+
   return (
     <div style={{ width: "100%" }}>
       <Wrapper className="header">
-        <Link to="/home">
+        <Link to={isAuthenticated ? "/" : "/home"}>
           <img src={logoName} className="header__right" alt="" />
         </Link>
         <div className="header__left">
@@ -121,8 +138,13 @@ export default function Header() {
             </Link>
           </div>
           <div>
-            <Button type="ghost" shape="round" className="button">
-              Etherum Mainnet
+            <Button
+              className="button"
+              type="ghost"
+              shape="round"
+              onClick={() => auth.signOut()}
+            >
+              Đăng xuất
             </Button>
             <Avatar src={photoURL} className="userLogo" size={40}>
               {photoURL ? "" : displayName?.charAt(0)?.toUpperCase()}

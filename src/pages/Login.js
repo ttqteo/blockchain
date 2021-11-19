@@ -50,13 +50,12 @@ const LoginWrapper = styled.div`
 const googleProvider = new GoogleAuthProvider();
 
 export default function Login() {
-
   const handleLogin = async (provider) => {
     await signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
         const data = getAdditionalUserInfo(result);
-        console.log("Đăng nhập")
+        console.log("Sign-in successfull!");
         if (data?.isNewUser) {
           addDocument("users", {
             displayName: user.displayName,
@@ -68,7 +67,9 @@ export default function Login() {
           });
         }
       })
-      .catch((error) => {console.log("Error Login!!!",error)});
+      .catch((error) => {
+        console.log("Error Login!!!", error);
+      });
   };
 
   return (
@@ -76,12 +77,15 @@ export default function Login() {
       <img src={logo} className="img" alt="logo" />
       <span className="text">Chào mừng bạn trở lại !</span>
       {/* <Link to="/"> */}
-        <Button className="button" type="ghost" shape="round"
-          onClick={() => handleLogin(googleProvider)}
-        >
-          <img src={googleLogo} className="logo" alt="google" />
-          Đăng nhập bằng Google
-        </Button>
+      <Button
+        className="button"
+        type="ghost"
+        shape="round"
+        onClick={() => handleLogin(googleProvider)}
+      >
+        <img src={googleLogo} className="logo" alt="google" />
+        Đăng nhập bằng Google
+      </Button>
       {/* </Link> */}
     </LoginWrapper>
   );
