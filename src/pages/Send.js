@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useContext, useState} from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import { Input } from "antd";
 import eth from "../assets/eth_logo.png";
 import { Link } from "react-router-dom";
+import {AuthContext} from "../Context/AuthProvider";
+import { doc, setDoc  } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 const Wrapper = styled.div`
   max-width: 874px;
@@ -133,6 +136,39 @@ const TokenInputWrapper = styled.div`
 `;
 
 export default function Send() {
+  let {user: { displayName, uid, balance },} = useContext(AuthContext);
+  let userStorage = JSON.parse(localStorage.getItem('users'));
+  const [receiver, setReceiver] = useState("")
+  const [quantity,setQuantity] = useState(0)
+  const handleTransaction = () => {
+
+      userStorage.map((user)=>{
+        if (user.uid===receiver){
+          user.balance = user.balance + parseInt(quantity);
+          setDoc(doc(db, "users", user.uid), {
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            uid: user.uid,
+            providerId: user.providerId,
+            balance: user.balance,
+          });
+        }
+        if (user.uid === uid) {
+          user.balance = user.balance - parseInt(quantity);
+          setDoc(doc(db, "users", user.uid), {
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            uid: user.uid,
+            providerId: user.providerId,
+            balance: user.balance,
+          });
+        }
+      })
+      setQuantity(0)
+      setReceiver("")
+  }
   return (  
     <Wrapper>
       <HeadingWrapper>
@@ -144,20 +180,27 @@ export default function Send() {
       <FunctionWrapper>
         <InputWrapper>
           <div className="type">Gửi đến ví</div>
-          <Input className="inputType" placeholder="Nhập ví cần gửi" />
+          <Input className="inputType" placeholder="Nhập ví cần gửi" 
+            value = {receiver}
+            onChange={(e)=>setReceiver(e.target.value)}
+          />
         </InputWrapper>
         <TokenInputWrapper>
           <div className="typeToken">
             <img className="img" src={eth} alt=""/>
             <span className="name">ETH</span>
           </div>
-          <Input className="inputType" placeholder="Số lượng Token" />
+          <Input className="inputType" placeholder="Số lượng Token" 
+            value = {quantity}
+            onChange={(e)=>setQuantity(e.target.value)}
+          />
         </TokenInputWrapper>
         <Button
           size="large"
           type="primary"
           shape="round"
           className="end-button"
+          onClick= {handleTransaction}
         >
           Gửi
         </Button>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 // import { user } from "../firebase/api.js";
@@ -240,9 +240,6 @@ export default function Dashboard() {
           <div className="title ">Hoạt động</div>
         </div>
         <div className="assets__wrapper">
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
           <Asset name="ETH" value="2" />
           <Asset name="ETH" value="2" />
           <Asset name="ETH" value="2" />

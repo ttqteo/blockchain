@@ -4,9 +4,10 @@ import styled from "styled-components";
 import logo from "../assets/logo.png";
 import googleLogo from "../assets/google.png";
 // import { Link } from "react-router-dom";
-import { addDocument } from "../firebase/services";
-
+// import { addDocument } from "../firebase/services";
+import { doc, setDoc, serverTimestamp  } from "firebase/firestore";
 import { auth } from "../firebase/config";
+import { db } from "../firebase/config";
 
 import {
   signInWithPopup,
@@ -55,16 +56,24 @@ export default function Login() {
       .then((result) => {
         const user = result.user;
         const data = getAdditionalUserInfo(result);
-        console.log("Sign-in successfull!");
         if (data?.isNewUser) {
-          addDocument("users", {
+          // addDocument("users", {
+          //   displayName: user.displayName,
+          //   email: user.email,
+          //   photoURL: user.photoURL,
+          //   uid: user.uid,
+          //   providerId: user.providerId,
+          //   balance: 100,
+          // });
+          setDoc(doc(db, "users", user.uid), {
             displayName: user.displayName,
             email: user.email,
             photoURL: user.photoURL,
             uid: user.uid,
             providerId: user.providerId,
             balance: 100,
-          });
+            createdAt: serverTimestamp(),
+          })
         }
       })
       .catch((error) => {

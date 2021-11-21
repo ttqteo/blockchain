@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import {AuthContext} from "../Context/AuthProvider";
+import { doc, setDoc  } from "firebase/firestore";
+import { db } from "../firebase/config";
 const Wrapper = styled.div`
   max-width: 874px;
   margin: 8px auto 0;
@@ -94,8 +96,28 @@ const FunctionWrapper = styled.div`
 `;
 
 export default function Buy() {
+  let navigate = useNavigate();
+  let userStorage = JSON.parse(localStorage.getItem('users'));
   const [cash, setCash] = useState(0);
+  let {user: {uid},} = useContext(AuthContext);
 
+  const handleBuy = () => {
+    userStorage.map((user) => {
+      if (user.uid===uid){
+        setDoc(doc(db, "users", uid), {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid,
+          providerId: user.providerId,
+          balance: user.balance + cash,
+        });
+      }
+    })
+    setCash(0)
+    navigate("/")
+}
+  
   return (
     <Wrapper>
       <HeadingWrapper>
@@ -130,10 +152,11 @@ export default function Buy() {
           type="primary"
           shape="round"
           className="end-button"
+          onClick={handleBuy}
         >
           Hoàn tất
         </Button>
       </FunctionWrapper>
     </Wrapper>
-  );
+  )
 }

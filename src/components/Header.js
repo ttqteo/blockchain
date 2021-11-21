@@ -142,7 +142,10 @@ export default function Header() {
               className="button"
               type="ghost"
               shape="round"
-              onClick={() => auth.signOut()}
+              onClick={() => {
+                window.alert("Bạn muốn đăng xuất ?")
+                auth.signOut()
+                }}
             >
               Đăng xuất
             </Button>
