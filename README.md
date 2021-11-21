@@ -10,6 +10,11 @@ Link deployed website: https://zen-lovelace-a38391.netlify.app/
 6. Buy USD, Send Token, Swap Token: coming soon
 
 ## local host
+
+### `npm install`
+
+Installs npm in your computer to run app
+
 ### `npm start`
 
 Runs the app in the development mode.\
