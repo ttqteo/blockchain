@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ETH from "../assets/eth_logo.png";
+import listToken from "../firebase/tokenList";
 
 const Row = styled.div`
   width: 100%;
@@ -68,7 +68,23 @@ export default function Activity({
 }) {
   return (
     <Row>
-      <img src={ETH} className="img" alt="logo"/>
+      {type === "buy" ? (
+        <img src={listToken[3].logo} className="img" alt="logo" />
+      ) : type === "swap" ? (
+        listToken.map(
+          (item) =>
+            item.name === token2 && (
+              <img src={item.logo} className="img" alt="logo" />
+            )
+        )
+      ) : (
+        listToken.map(
+          (item) =>
+            item.name === token1 && (
+              <img src={item.logo} className="img" alt="logo" />
+            )
+        )
+      )}
       <div className="text">
         <span className="message">
           Bạn đã{" "}

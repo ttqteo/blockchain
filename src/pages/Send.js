@@ -1,12 +1,12 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import { Input } from "antd";
-import eth from "../assets/eth_logo.png";
-import { Link } from "react-router-dom";
-import {AuthContext} from "../Context/AuthProvider";
-import { doc, setDoc  } from "firebase/firestore";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthProvider";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
+import ModalToken from "../components/ModalToken";
 
 const Wrapper = styled.div`
   max-width: 874px;
@@ -104,25 +104,25 @@ const TokenInputWrapper = styled.div`
     position: absolute;
     z-index: 99;
     width: 118px;
-    border-right: 2px solid #d9d9d9;
-    height: 60px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     cursor: pointer;
+    border: 1px solid #d9d9d9;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background: #fff;
+    min-height: 60px;
   }
-  .typeToken .img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px solid #333;
-    padding: 4px;
-    margin-left: 12px;
+  .typeToken.min {
+    overflow: hidden;
+    height: 60px;
   }
-  .typeToken .name {
-    font-size: 24px;
-    line-height: 24px;
-    font-weight: bold;
-    margin-left: 6px;
+  .typeToken.min .token-row {
+    display: none;
+  }
+  .typeToken .token-row.active {
+    display: flex;
   }
   .inputType {
     width: 315px;
@@ -136,40 +136,55 @@ const TokenInputWrapper = styled.div`
 `;
 
 export default function Send() {
-  let {user: { displayName, uid, balance },} = useContext(AuthContext);
-  let userStorage = JSON.parse(localStorage.getItem('users'));
-  const [receiver, setReceiver] = useState("")
-  const [quantity,setQuantity] = useState(0)
-  const handleTransaction = () => {
+  let navigate = useNavigate();
 
-      userStorage.map((user)=>{
-        if (user.uid===receiver){
-          user.balance = user.balance + parseInt(quantity);
-          setDoc(doc(db, "users", user.uid), {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            uid: user.uid,
-            providerId: user.providerId,
-            balance: user.balance,
-          });
-        }
-        if (user.uid === uid) {
-          user.balance = user.balance - parseInt(quantity);
-          setDoc(doc(db, "users", user.uid), {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            uid: user.uid,
-            providerId: user.providerId,
-            balance: user.balance,
-          });
-        }
-      })
-      setQuantity(0)
-      setReceiver("")
-  }
-  return (  
+  let {
+    user: { displayName, uid, balance },
+  } = useContext(AuthContext);
+  let userStorage = JSON.parse(localStorage.getItem("users"));
+  const [receiver, setReceiver] = useState("");
+  const [quantity, setQuantity] = useState(0);
+  const handleTransaction = () => {
+    alert("Gửi thành công !");
+    userStorage.map((user) => {
+      if (user.uid === receiver) {
+        user.balance = user.balance + parseInt(quantity);
+        setDoc(doc(db, "users", user.uid), {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid,
+          providerId: user.providerId,
+          balance: user.balance,
+        });
+      }
+      if (user.uid === uid) {
+        user.balance = user.balance - parseInt(quantity);
+        setDoc(doc(db, "users", user.uid), {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid,
+          providerId: user.providerId,
+          balance: user.balance,
+        });
+      }
+    });
+    setQuantity(0);
+    setReceiver("");
+    navigate("/");
+  };
+
+  const handleToggleList = (e) => {
+    document.querySelector(".token-row.active").classList.remove("active");
+    const tokenList = document.querySelectorAll(".token-row");
+    const activeItem = e.target.closest(".token-row");
+    tokenList.forEach((item) =>
+      item.classList.toggle("active", activeItem === item)
+    );
+    document.querySelector(".typeToken").classList.toggle("min");
+  };
+  return (
     <Wrapper>
       <HeadingWrapper>
         <span className="name">Gửi</span>
@@ -180,19 +195,26 @@ export default function Send() {
       <FunctionWrapper>
         <InputWrapper>
           <div className="type">Gửi đến ví</div>
-          <Input className="inputType" placeholder="Nhập ví cần gửi" 
-            value = {receiver}
-            onChange={(e)=>setReceiver(e.target.value)}
+          <Input
+            className="inputType"
+            placeholder="Nhập ví cần gửi"
+            value={receiver}
+            onChange={(e) => setReceiver(e.target.value)}
           />
         </InputWrapper>
         <TokenInputWrapper>
-          <div className="typeToken">
-            <img className="img" src={eth} alt=""/>
-            <span className="name">ETH</span>
+          <div className="typeToken min" onClick={handleToggleList}>
+            <ModalToken token="ETH" active />
+            <ModalToken token="BNB" />
+            <ModalToken token="BTC" />
+            <ModalToken token="ADA" />
+            <ModalToken token="SOL" />
           </div>
-          <Input className="inputType" placeholder="Số lượng Token" 
-            value = {quantity}
-            onChange={(e)=>setQuantity(e.target.value)}
+          <Input
+            className="inputType"
+            placeholder="Số lượng Token"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
           />
         </TokenInputWrapper>
         <Button
@@ -200,7 +222,7 @@ export default function Send() {
           type="primary"
           shape="round"
           className="end-button"
-          onClick= {handleTransaction}
+          onClick={handleTransaction}
         >
           Gửi
         </Button>

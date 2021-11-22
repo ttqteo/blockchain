@@ -2,9 +2,10 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import {AuthContext} from "../Context/AuthProvider";
-import { doc, setDoc  } from "firebase/firestore";
+import { AuthContext } from "../Context/AuthProvider";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
+
 const Wrapper = styled.div`
   max-width: 874px;
   margin: 8px auto 0;
@@ -78,7 +79,7 @@ const FunctionWrapper = styled.div`
   .usdController .plus:hover {
     filter: brightness(1.1);
   }
-  .usdController #money {
+  .usdController .money-wrapper {
     font-size: 40px;
     font-weight: bold;
     margin: 0 16px;
@@ -97,27 +98,31 @@ const FunctionWrapper = styled.div`
 
 export default function Buy() {
   let navigate = useNavigate();
-  let userStorage = JSON.parse(localStorage.getItem('users'));
+  let userStorage = JSON.parse(localStorage.getItem("users"));
   const [cash, setCash] = useState(0);
-  let {user: {uid},} = useContext(AuthContext);
+  let {
+    user: { uid },
+  } = useContext(AuthContext);
 
   const handleBuy = () => {
+    const value = parseInt(document.getElementById("money").innerText);
+    alert("Bạn đã mua " + value + " USD");
     userStorage.map((user) => {
-      if (user.uid===uid){
+      if (user.uid === uid) {
         setDoc(doc(db, "users", uid), {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
           uid: user.uid,
           providerId: user.providerId,
-          balance: user.balance + cash,
+          balance: parseInt(user.balance) + value,
         });
       }
-    })
-    setCash(0)
-    navigate("/")
-}
-  
+    });
+    setCash(0);
+    navigate("/");
+  };
+
   return (
     <Wrapper>
       <HeadingWrapper>
@@ -137,7 +142,17 @@ export default function Buy() {
             icon={<i className="fas fa-minus"></i>}
             onClick={() => setCash(cash - 1)}
           />
-          <span id="money">$ {cash}</span>
+          <div className="money-wrapper">
+            $
+            <span
+              id="money"
+              contentEditable="true"
+              onKeyPress={(e) => e.code === "Enter" && e.preventDefault()}
+              suppressContentEditableWarning={true}
+            >
+              {cash}
+            </span>
+          </div>
           <Button
             size="large"
             type="primary"
@@ -158,5 +173,5 @@ export default function Buy() {
         </Button>
       </FunctionWrapper>
     </Wrapper>
-  )
+  );
 }

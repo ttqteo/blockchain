@@ -1,14 +1,13 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
-// import { user } from "../firebase/api.js";
-import eth from "../assets/eth_logo.png";
+import eth from "../assets/token/eth.png";
 import Asset from "../components/Asset.js";
 import Activity from "../components/Activity.js";
 import { Link } from "react-router-dom";
-import { auth } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
-import { useAuthState, AuthContext } from "../Context/AuthProvider";
+import { AuthContext } from "../Context/AuthProvider";
+
 const Wrapper = styled.div`
   max-width: 874px;
   height: 100%;
@@ -187,12 +186,24 @@ export default function Dashboard() {
     });
   };
 
+  const handleCopyWallet = (uid) => {
+    navigator.clipboard.writeText(uid);
+    alert(
+      'Sao chép địa chỉ ví thành công !\nĐịa chỉ ví của bạn là "' + uid + '"'
+    );
+  };
+
   return (
     <Wrapper>
       <PublicKey>
-        <div className="info">
+        <div className="info" onClick={() => handleCopyWallet(uid)}>
           <span className="name"> {displayName} </span>
-          <span className="key"> {uid} </span>
+          <span className="key">
+            {" "}
+            {`${uid ? uid.substring(0, 4) : ""} ... ${
+              uid ? uid.substring(uid.length - 4, uid.length) : ""
+            }`}{" "}
+          </span>
         </div>
       </PublicKey>
       <FunctionWrapper>
@@ -240,15 +251,10 @@ export default function Dashboard() {
           <div className="title ">Hoạt động</div>
         </div>
         <div className="assets__wrapper">
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <div className="button">
-            <Button type="primary" shape="round" size="large">
-              Thêm đồng mới
-            </Button>
-          </div>
+          <Asset name="ETH" value="200" />
+          <Asset name="BNB" value="444" />
+          <Asset name="BTC" value="23" />
+          <Asset name="USD" value="100" />
         </div>
         <div className="activities_wrapper hide">
           <Activity
@@ -283,11 +289,6 @@ export default function Dashboard() {
             token2=""
             date="12:15PM Nov 10th, 2021"
           />
-          <div className="button">
-            <Button type="primary" shape="round" size="large">
-              Thêm giao dịch mới
-            </Button>
-          </div>
         </div>
       </AAWrapper>
     </Wrapper>

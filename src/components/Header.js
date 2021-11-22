@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext } from "react";
 import { AuthContext, useAuthState } from "../Context/AuthProvider";
 import styled from "styled-components";
 import logoName from "../assets/logo_name.png";
@@ -143,9 +143,9 @@ export default function Header() {
               type="ghost"
               shape="round"
               onClick={() => {
-                window.alert("Bạn muốn đăng xuất ?")
-                auth.signOut()
-                }}
+                alert("Bạn muốn đăng xuất ?");
+                auth.signOut();
+              }}
             >
               Đăng xuất
             </Button>
