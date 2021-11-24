@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import listToken from "../firebase/tokenList";
+import { AuthContext } from "../Context/AuthProvider";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 const Row = styled.div`
   width: 100%;
@@ -66,6 +69,7 @@ export default function Activity({
   value,
   date,
 }) {
+  let userStorage = JSON.parse(localStorage.getItem("users"));
   return (
     <Row>
       {type === "buy" ? (

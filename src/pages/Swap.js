@@ -5,6 +5,9 @@ import { Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import ModalToken from "../components/ModalToken";
 
+
+import { doc, setDoc, set } from "firebase/firestore";
+import { db } from "../firebase/config";
 const Wrapper = styled.div`
   max-width: 874px;
   margin: 8px auto 0;
@@ -127,7 +130,15 @@ const TokenInputWrapper = styled.div`
 
 export default function Swap() {
   let navigate = useNavigate();
-
+  const addDoc = () => {
+    setDoc(doc(db, "blockchain","12345466"), {
+      name: {
+        ho:"vo van",
+        ten:"quang",
+      },
+      age:22
+    });
+  }
   const handleToggleList1 = (e) => {
     document
       .querySelector(".typeToken1 .token-row.active")
@@ -201,7 +212,7 @@ export default function Swap() {
           type="primary"
           shape="round"
           className="end-button"
-          onClick={handleSwap}
+          onClick={addDoc}
         >
           Chuyển
         </Button>

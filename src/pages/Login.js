@@ -55,6 +55,7 @@ export default function Login() {
         const user = result.user;
         const data = getAdditionalUserInfo(result);
         if (data?.isNewUser) {
+          const newLocal = "../assets/token/eth.png";
           // addDocument("users", {
           //   displayName: user.displayName,
           //   email: user.email,
@@ -64,12 +65,48 @@ export default function Login() {
           //   balance: 100,
           // });
           setDoc(doc(db, "users", user.uid), {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
             uid: user.uid,
-            providerId: user.providerId,
-            balance: 100,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            email: user.email,
+            asset: [
+              {
+                code: "ETH",
+                quantity: 0,
+                logoURL: "../assets/token/eth.png",
+              },
+              {
+               code: "BNB",
+               quantity: 20,
+               logoURL: "../assets/token/bnb.png",
+             },
+             {
+               code: "BTC",
+               quantity: 0,
+               logoURL: "../assets/token/btc.png",
+             },
+             {
+               code: "ADA",
+               quantity: 0,
+               logoURL: "../assets/token/usd.png",
+             },
+             {
+               code: "SOL",
+               quantity: 0,
+               logoURL: "../assets/token/ada.png",
+             },
+             {
+               code: "USD",
+               quantity: 0,
+               logoURL: "../assets/token/sol.png",
+             }
+            ],
+            activity: {
+              buy:{
+                quantity:0,
+                createdAt: serverTimestamp(),
+              }
+            },
             createdAt: serverTimestamp(),
           });
         }

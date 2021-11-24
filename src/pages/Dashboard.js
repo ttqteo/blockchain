@@ -164,6 +164,7 @@ const AAWrapper = styled.div`
 
 export default function Dashboard() {
   let navigate = useNavigate();
+  let userStorage = JSON.parse(localStorage.getItem("users"));
 
   let {
     user: { displayName, uid, balance },
@@ -251,10 +252,21 @@ export default function Dashboard() {
           <div className="title ">Hoạt động</div>
         </div>
         <div className="assets__wrapper">
-          <Asset name="ETH" value="200" />
-          <Asset name="BNB" value="444" />
-          <Asset name="BTC" value="23" />
-          <Asset name="USD" value="100" />
+         {userStorage.map((user) => {
+              if (user.uid === uid){
+                const obj = user.asset
+                  // eslint-disable-next-line no-lone-blocks
+                  {obj.map( (item) => {
+                    return (
+                      <Asset
+                          code = {item.code}
+                          logoURL = {item.logoURL}
+                          quantity = {item.quantity}
+                      />
+                    )
+                  })}
+              }
+          })}
         </div>
         <div className="activities_wrapper hide">
           <Activity
@@ -265,30 +277,7 @@ export default function Dashboard() {
             token2=""
             date="12:15PM Nov 10th, 2021"
           />
-          <Activity
-            type="swap"
-            wallet=""
-            token1="ETH"
-            value="100"
-            token2="BNB"
-            date="12:15PM Nov 10th, 2021"
-          />
-          <Activity
-            type="send"
-            wallet="0x1234...abcd"
-            token1="ETH"
-            value="100"
-            token2=""
-            date="12:15PM Nov 10th, 2021"
-          />
-          <Activity
-            type="receive"
-            wallet="0x1234...abcd"
-            token1="ETH"
-            value="100"
-            token2=""
-            date="12:15PM Nov 10th, 2021"
-          />
+         
         </div>
       </AAWrapper>
     </Wrapper>
