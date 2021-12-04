@@ -24,7 +24,11 @@ public class Block {
 		String calculatedhash = StringUtil.applySha256(previousHash + Long.toString(timeStamp) + Integer.toString(nonce) + data);		
 		return calculatedhash;
 	}
-	/* dung de dao */
+
+	/* dung de tao ra hash co dinh dang theo yeu cau [difficulty]........
+		vi tri su dung la sau khi tao block
+	
+	*/
 	public void mineBlock(int difficulty) {
 		
 		String target = new String(new char[difficulty]).replace('\0', '0'); //Create a string with difficulty * "0" 
@@ -32,7 +36,7 @@ public class Block {
 			nonce ++;			
 			hash = calculateHash();
 		}
-		System.out.println("Block Mined!!! : " + hash);
+		//System.out.println("Block Mined!!! : " + hash);
 	}
 	
 }

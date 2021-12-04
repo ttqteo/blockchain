@@ -32,7 +32,7 @@ public class test {
             	data=data+"\n"+"data moi";          	
             	Block Blocknow=new Block(data, blockchain.get(blockchain.size() - 1).hash);            	
             	blockchain.add(Blocknow);
-            	blockchain.get(i-1).mineBlock(difficulty);
+            	blockchain.get(i-1).mineBlock(difficulty);//tao lai hash theo dinh dang nham tao do kho khi ai do muon sua du lieu
             	if(isChainValid().equals(true)) //kiem tra tinh toan ven
             	{
             		System.out.println("block true");
@@ -60,12 +60,12 @@ public class test {
 			previousBlock = blockchain.get(i - 1);
 			// compare registered hash and calculated hash:
 			if (!currentBlock.hash.equals(currentBlock.calculateHash())) {
-				System.out.println("Current Hashes not equal");
+				System.out.println("Current Hashes not equal,error block "+ i);
 				return false;
 			}
 			// compare previous hash and registered previous hash
 			if (!previousBlock.hash.equals(currentBlock.previousHash)) {
-				System.out.println("Previous Hashes not equal");
+				System.out.println("Previous Hashes not equal, error block "+ i);
 				return false;
 			}
 		}
