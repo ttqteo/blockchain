@@ -142,7 +142,6 @@ function Send() {
     user: { displayName, uid },
   } = useContext(AuthContext);
   let {assetList: {list}} = useContext(AssetContext)
-  console.log(list,"send")
   let userStorage = JSON.parse(localStorage.getItem("users"));
   const [receiver, setReceiver] = useState("");
   const [quantity, setQuantity] = useState(0);

@@ -115,7 +115,7 @@ export default function Buy() {
         //xử lí mua
         let assetBuy = []
         list.map((item)=>{
-          if (item.code !== "USD") {
+          if (item.code !== "ETH") {
             return assetBuy.push(item)
           }else{
             assetBuy = [

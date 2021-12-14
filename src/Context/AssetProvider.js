@@ -11,7 +11,6 @@ export default function AssetProvider({ children }) {
         assetListtemp = doc.asset;
       }
   })
-  console.log(assetListtemp,"AssetProvider");
   const assetList = {
     list: assetListtemp,
   }

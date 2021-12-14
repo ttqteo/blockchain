@@ -1,13 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import eth from "../assets/token/eth.png";
 import Asset from "../components/Asset.js";
 import Activity from "../components/Activity.js";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import { AssetContext } from "../Context/AssetProvider";
-
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 const Wrapper = styled.div`
   max-width: 874px;
   height: 100%;
@@ -163,8 +166,25 @@ const AAWrapper = styled.div`
 `;
 
 function Dashboard() {
-  let userStorage = JSON.parse(localStorage.getItem("users"));
 
+
+  const [coins, setCoins] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false'
+      )
+      .then(res => {
+        setCoins(res.data);
+        console.log(res.data);
+      })
+      .catch(error => console.log(error));
+  }, []);
+
+  console.log(coins)
+ 
+  let userStorage = JSON.parse(localStorage.getItem("users"));
   let { user: { displayName , uid, photoURL } } = useContext(AuthContext);
   let {assetList: {list}} = useContext(AssetContext)
   const exchangeRateUTHToUsd = 4158.45;
@@ -185,12 +205,14 @@ function Dashboard() {
       }
     });
   };
+  
 
-  const handleCopyWallet = (uid) => {
-    navigator.clipboard.writeText(uid);
-    alert(
-      'Sao chép địa chỉ ví thành công !\nĐịa chỉ ví của bạn là "' + uid + '"'
+const handleCopyWallet = (uid) => {
+  navigator.clipboard.writeText(uid);
+  alert(
+    'Sao chép địa chỉ ví thành công !\nĐịa chỉ ví của bạn là "' + uid + '"'
     );
+    window.location.reload(false);
   };
   return (
     <Wrapper>
