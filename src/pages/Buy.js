@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Button } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
+import { AssetContext } from "../Context/AssetProvider";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 
@@ -104,18 +105,38 @@ export default function Buy() {
     user: { uid },
   } = useContext(AuthContext);
 
+  let {assetList: {list}} = useContext(AssetContext)
+
   const handleBuy = () => {
     const value = parseInt(document.getElementById("money").innerText);
     alert("Bạn đã mua " + value + " USD");
     userStorage.map((user) => {
       if (user.uid === uid) {
+        //xử lí mua
+        let assetBuy = []
+        list.map((item)=>{
+          if (item.code !== "USD") {
+            return assetBuy.push(item)
+          }else{
+            assetBuy = [
+              ...assetBuy,
+              {
+                code: item.code,
+                quantity: item.quantity + value,
+                logoURL: item.logoURL
+              }
+            ]
+          }
+        })
+        // Lưu lại lên firebase
         setDoc(doc(db, "users", uid), {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
           uid: user.uid,
-          providerId: user.providerId,
-          balance: parseInt(user.balance) + value,
+          asset: assetBuy,
+          createdAt: user.createdAt,
+          activity: user.activity,
         });
       }
     });

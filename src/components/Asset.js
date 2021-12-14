@@ -39,7 +39,7 @@ const Row = styled.div`
 export default function Asset({ logoURL, quantity, code }) {
   return (
     <Row>
-      <img src={logoURL} className="img" alt="" />
+      <img src= {logoURL} className="img" alt="logo" />
       <div className="text">
         <span className="token">
           {" "}

@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { memo, useContext, useState } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import { Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
+import { AssetContext } from "../Context/AssetProvider";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import ModalToken from "../components/ModalToken";
-
 const Wrapper = styled.div`
   max-width: 874px;
   margin: 8px auto 0;
@@ -135,38 +135,76 @@ const TokenInputWrapper = styled.div`
   }
 `;
 
-export default function Send() {
+function Send() {
   let navigate = useNavigate();
 
   let {
-    user: { displayName, uid, balance },
+    user: { displayName, uid },
   } = useContext(AuthContext);
+  let {assetList: {list}} = useContext(AssetContext)
+  console.log(list,"send")
   let userStorage = JSON.parse(localStorage.getItem("users"));
   const [receiver, setReceiver] = useState("");
   const [quantity, setQuantity] = useState(0);
+  const [selectedCoin, setSelectedCoin] = useState("");
   const handleTransaction = () => {
     alert("Gửi thành công !");
     userStorage.map((user) => {
       if (user.uid === receiver) {
-        user.balance = user.balance + parseInt(quantity);
+        user.asset[0].quantity = user.asset[0].quantity + parseInt(quantity);
+        // xử lí asset mới của ng nhận
+        let assetReceiver = []
+        list.map((item)=>{
+          if (item.code !== "ETH") {
+            return assetReceiver.push(item)
+          }else{
+            assetReceiver = [
+              ...assetReceiver,
+              {
+                code: item.code,
+                quantity:user.asset[0].quantity,
+                logoURL: item.logoURL
+              }
+            ]
+          }
+        })
+        // Lưu dữ liệu người nhận lên firebase
         setDoc(doc(db, "users", user.uid), {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
           uid: user.uid,
-          providerId: user.providerId,
-          balance: user.balance,
+          asset: assetReceiver,
+          createdAt: user.createdAt,
+          activity: user.activity,
         });
       }
       if (user.uid === uid) {
-        user.balance = user.balance - parseInt(quantity);
+        user.asset[0].quantity = user.asset[0].quantity - parseInt(quantity);   
+        // xử lí asset mới của ng gửi
+        let assetSender = []
+        user.asset.map((item)=>{
+          if (item.code !== "ETH") {
+            return assetSender.push(item)
+          }else{
+            assetSender = [
+              ...assetSender,
+              {
+                code: item.code,
+                quantity:user.asset[0].quantity,
+                logoURL: item.logoURL
+              }
+            ]
+          }
+        })
         setDoc(doc(db, "users", user.uid), {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
           uid: user.uid,
-          providerId: user.providerId,
-          balance: user.balance,
+          asset: assetSender,
+          createdAt: user.createdAt,
+          activity: user.activity,
         });
       }
     });
@@ -230,3 +268,5 @@ export default function Send() {
     </Wrapper>
   );
 }
+
+export default memo(Send)

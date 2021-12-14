@@ -5,8 +5,8 @@ import eth from "../assets/token/eth.png";
 import Asset from "../components/Asset.js";
 import Activity from "../components/Activity.js";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
+import { AssetContext } from "../Context/AssetProvider";
 
 const Wrapper = styled.div`
   max-width: 874px;
@@ -162,14 +162,13 @@ const AAWrapper = styled.div`
   }
 `;
 
-export default function Dashboard() {
-  let navigate = useNavigate();
+function Dashboard() {
   let userStorage = JSON.parse(localStorage.getItem("users"));
 
-  let {
-    user: { displayName, uid, balance },
-  } = useContext(AuthContext);
+  let { user: { displayName , uid, photoURL } } = useContext(AuthContext);
+  let {assetList: {list}} = useContext(AssetContext)
   const exchangeRateUTHToUsd = 4158.45;
+ 
   const handleClickHeading = (e) => {
     document
       .querySelectorAll(".heading .title")
@@ -193,7 +192,6 @@ export default function Dashboard() {
       'Sao chép địa chỉ ví thành công !\nĐịa chỉ ví của bạn là "' + uid + '"'
     );
   };
-
   return (
     <Wrapper>
       <PublicKey>
@@ -210,8 +208,8 @@ export default function Dashboard() {
       <FunctionWrapper>
         <div className="summary">
           <img className="img" src={eth} alt="" />
-          <span className="eth">{balance} ETH</span>
-          <span className="usd">{balance * exchangeRateUTHToUsd} USD</span>
+          <span className="eth">{uid ? list[0].quantity : ''} ETH</span>
+          <span className="usd">{uid ? list[0].quantity * exchangeRateUTHToUsd : 0} USD</span>
         </div>
         <div className="function">
           <Link to="/buy" className="item">
@@ -252,21 +250,16 @@ export default function Dashboard() {
           <div className="title ">Hoạt động</div>
         </div>
         <div className="assets__wrapper">
-         {userStorage.map((user) => {
-              if (user.uid === uid){
-                const obj = user.asset
-                  // eslint-disable-next-line no-lone-blocks
-                  {obj.map( (item) => {
+         {uid ? list.map((user,index) => {
                     return (
                       <Asset
-                          code = {item.code}
-                          logoURL = {item.logoURL}
-                          quantity = {item.quantity}
+                          key = {index}
+                          code = {user.code}
+                          logoURL = {user.logoURL}
+                          quantity = {user.quantity}
                       />
-                    )
-                  })}
-              }
-          })}
+                    )            
+          }): ''}
         </div>
         <div className="activities_wrapper hide">
           <Activity
@@ -283,3 +276,6 @@ export default function Dashboard() {
     </Wrapper>
   );
 }
+
+
+export default Dashboard

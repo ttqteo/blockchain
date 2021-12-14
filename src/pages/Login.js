@@ -55,7 +55,6 @@ export default function Login() {
         const user = result.user;
         const data = getAdditionalUserInfo(result);
         if (data?.isNewUser) {
-          const newLocal = "../assets/token/eth.png";
           // addDocument("users", {
           //   displayName: user.displayName,
           //   email: user.email,
@@ -73,32 +72,32 @@ export default function Login() {
               {
                 code: "ETH",
                 quantity: 0,
-                logoURL: "../assets/token/eth.png",
+                logoURL: "https://cryptorunner.com/wp-content/uploads/2017/10/ethereum-symbol.png",
               },
               {
                code: "BNB",
-               quantity: 20,
-               logoURL: "../assets/token/bnb.png",
+               quantity: 0,
+               logoURL: "https://th.bing.com/th/id/OIP.joIRFGbuK3AsFH8pTSUnZgHaHa?pid=ImgDet&rs=1",
              },
              {
                code: "BTC",
                quantity: 0,
-               logoURL: "../assets/token/btc.png",
+               logoURL: "https://th.bing.com/th/id/OIP.gYEEYXuJLYw03cV0_ANzcwHaHa?pid=ImgDet&rs=1",
              },
              {
                code: "ADA",
                quantity: 0,
-               logoURL: "../assets/token/usd.png",
+               logoURL: "https://th.bing.com/th/id/OIP.bv3opyCP290QI6iGEjZsiQAAAA?pid=ImgDet&rs=1",
              },
              {
                code: "SOL",
                quantity: 0,
-               logoURL: "../assets/token/ada.png",
+               logoURL: "https://cdn2.vectorstock.com/i/thumb-large/22/21/solana-sol-token-symbol-cryptocurrency-logo-vector-39742221.jpg",
              },
              {
                code: "USD",
                quantity: 0,
-               logoURL: "../assets/token/sol.png",
+               logoURL: "https://th.bing.com/th/id/R.3704b75bbdacf82e6c508f1ef1afd46f?rik=RMZ4CEQ4o%2bMpUA&pid=ImgRaw&r=0",
              }
             ],
             activity: {
