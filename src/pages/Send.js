@@ -8,6 +8,10 @@ import { AssetContext } from "../Context/AssetProvider";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import ModalToken from "../components/ModalToken";
+
+import { Select } from 'antd';
+const { Option } = Select;
+
 const Wrapper = styled.div`
   max-width: 874px;
   margin: 8px auto 0;
@@ -139,29 +143,32 @@ function Send() {
   let navigate = useNavigate();
 
   let {
-    user: { displayName, uid },
+    user: { uid },
   } = useContext(AuthContext);
   let {assetList: {list}} = useContext(AssetContext)
   let userStorage = JSON.parse(localStorage.getItem("users"));
+  const coinCodeData = ['ETH','BNB','BTC','ADA','SOL','USD'];
+  const [selectedCoin, setSelectedCoin] = useState(coinCodeData[0]);
+  console.log(selectedCoin)
   const [receiver, setReceiver] = useState("");
   const [quantity, setQuantity] = useState(0);
-  const [selectedCoin, setSelectedCoin] = useState("");
   const handleTransaction = () => {
     alert("Gửi thành công !");
     userStorage.map((user) => {
       if (user.uid === receiver) {
-        user.asset[0].quantity = user.asset[0].quantity + parseInt(quantity);
         // xử lí asset mới của ng nhận
+        let userReceiver = user.asset
         let assetReceiver = []
-        list.map((item)=>{
-          if (item.code !== "ETH") {
+        userReceiver.map((item)=>{
+          if (item.code !== selectedCoin) {
             return assetReceiver.push(item)
           }else{
+            console.log(item.quantity)
             assetReceiver = [
               ...assetReceiver,
               {
                 code: item.code,
-                quantity:user.asset[0].quantity,
+                quantity: item.quantity + parseInt(quantity),
                 logoURL: item.logoURL
               }
             ]
@@ -179,18 +186,18 @@ function Send() {
         });
       }
       if (user.uid === uid) {
-        user.asset[0].quantity = user.asset[0].quantity - parseInt(quantity);   
         // xử lí asset mới của ng gửi
         let assetSender = []
         user.asset.map((item)=>{
-          if (item.code !== "ETH") {
+          if (item.code !== selectedCoin ) {
             return assetSender.push(item)
           }else{
+            console.log(item.quantity)
             assetSender = [
               ...assetSender,
               {
                 code: item.code,
-                quantity:user.asset[0].quantity,
+                quantity:item.quantity - parseInt(quantity),
                 logoURL: item.logoURL
               }
             ]
@@ -240,13 +247,30 @@ function Send() {
           />
         </InputWrapper>
         <TokenInputWrapper>
-          <div className="typeToken min" onClick={handleToggleList}>
+          {/* <div className="typeToken min" onClick={handleToggleList}>
             <ModalToken token="ETH" active />
             <ModalToken token="BNB" />
             <ModalToken token="BTC" />
             <ModalToken token="ADA" />
             <ModalToken token="SOL" />
-          </div>
+           
+          </div> */}
+          <Select
+            showSearch
+            style={{ width: 70 }}
+            placeholder="Search to Select"
+            optionFilterProp="children"
+            onChange={(e)=>{setSelectedCoin(e)}}
+          
+          >
+            <Option value="ETH">ETH</Option>
+            <Option value="BTC">BTC</Option>
+            <Option value="BNB">BNB</Option>
+            <Option value="SOL">SOL</Option>
+            <Option value="ADA">ADA</Option>
+            <Option value="USD">USD</Option>
+          </Select>,
+
           <Input
             className="inputType"
             placeholder="Số lượng Token"

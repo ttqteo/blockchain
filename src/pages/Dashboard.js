@@ -187,7 +187,7 @@ function Dashboard() {
   let userStorage = JSON.parse(localStorage.getItem("users"));
   let { user: { displayName , uid, photoURL } } = useContext(AuthContext);
   let {assetList: {list}} = useContext(AssetContext)
-  const exchangeRateUTHToUsd = 4158.45;
+  const exchangeRateUTHToUsd = 4158;
  
   const handleClickHeading = (e) => {
     document
@@ -212,7 +212,6 @@ const handleCopyWallet = (uid) => {
   alert(
     'Sao chép địa chỉ ví thành công !\nĐịa chỉ ví của bạn là "' + uid + '"'
     );
-    window.location.reload(false);
   };
   return (
     <Wrapper>

@@ -71,32 +71,32 @@ export default function Login() {
             asset: [
               {
                 code: "ETH",
-                quantity: 0,
+                quantity: 150,
                 logoURL: "https://cryptorunner.com/wp-content/uploads/2017/10/ethereum-symbol.png",
               },
               {
                code: "BNB",
-               quantity: 0,
+               quantity: 17.5,
                logoURL: "https://th.bing.com/th/id/OIP.joIRFGbuK3AsFH8pTSUnZgHaHa?pid=ImgDet&rs=1",
              },
              {
                code: "BTC",
-               quantity: 0,
+               quantity: 143,
                logoURL: "https://th.bing.com/th/id/OIP.gYEEYXuJLYw03cV0_ANzcwHaHa?pid=ImgDet&rs=1",
              },
              {
                code: "ADA",
-               quantity: 0,
+               quantity: 27,
                logoURL: "https://th.bing.com/th/id/OIP.bv3opyCP290QI6iGEjZsiQAAAA?pid=ImgDet&rs=1",
              },
              {
                code: "SOL",
-               quantity: 0,
+               quantity: 68,
                logoURL: "https://cdn2.vectorstock.com/i/thumb-large/22/21/solana-sol-token-symbol-cryptocurrency-logo-vector-39742221.jpg",
              },
              {
                code: "USD",
-               quantity: 0,
+               quantity: 1000,
                logoURL: "https://th.bing.com/th/id/R.3704b75bbdacf82e6c508f1ef1afd46f?rik=RMZ4CEQ4o%2bMpUA&pid=ImgRaw&r=0",
              }
             ],

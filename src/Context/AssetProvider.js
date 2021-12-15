@@ -14,6 +14,7 @@ export default function AssetProvider({ children }) {
   const assetList = {
     list: assetListtemp,
   }
+  console.log(assetList,"AssetProvider")
   return (
     <AssetContext.Provider value = { {assetList} }>
       {children}

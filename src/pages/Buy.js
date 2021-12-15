@@ -109,13 +109,12 @@ export default function Buy() {
 
   const handleBuy = () => {
     const value = parseInt(document.getElementById("money").innerText);
-    alert("Bạn đã mua " + value + " USD");
     userStorage.map((user) => {
       if (user.uid === uid) {
         //xử lí mua
         let assetBuy = []
         list.map((item)=>{
-          if (item.code !== "ETH") {
+          if (item.code !== "USD") {
             return assetBuy.push(item)
           }else{
             assetBuy = [
@@ -140,8 +139,10 @@ export default function Buy() {
         });
       }
     });
+    alert("Bạn đã mua " + value + " USD");
     setCash(0);
     navigate("/");
+
   };
 
   return (
