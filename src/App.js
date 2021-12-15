@@ -10,6 +10,7 @@ import Swap from "./pages/Swap";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AuthProvider from "./Context/AuthProvider";
+import AssetProvider from "./Context/AssetProvider";
 import Copyright from "./components/Copyright";
 
 function App() {
@@ -17,16 +18,18 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <AuthProvider>
-          <Header />
-          <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/buy" element={<Buy />} />
-            <Route path="/send" element={<Send />} />
-            <Route path="/swap" element={<Swap />} />
-            <Route path="/" element={<Dashboard />} />
-          </Routes>
-          <Copyright />
+          <AssetProvider>
+            <Header />
+            <Routes>
+              <Route path="/home" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/buy" element={<Buy />} />
+              <Route path="/send" element={<Send />} />
+              <Route path="/swap" element={<Swap />} />
+              <Route path="/" element={<Dashboard />} />
+            </Routes>
+            <Copyright />
+          </AssetProvider>
         </AuthProvider>
       </BrowserRouter>
     </div>

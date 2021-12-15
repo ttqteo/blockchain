@@ -1,13 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import eth from "../assets/token/eth.png";
 import Asset from "../components/Asset.js";
 import Activity from "../components/Activity.js";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
-
+import { AssetContext } from "../Context/AssetProvider";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const Wrapper = styled.div`
   max-width: 874px;
   height: 100%;
@@ -162,14 +165,32 @@ const AAWrapper = styled.div`
   }
 `;
 
-export default function Dashboard() {
-  let navigate = useNavigate();
-  let userStorage = JSON.parse(localStorage.getItem("users"));
+function Dashboard() {
+  const [coins, setCoins] = useState([]);
 
+  useEffect(() => {
+    axios
+      .get(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false"
+      )
+      .then((res) => {
+        setCoins(res.data);
+        console.log(res.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  console.log(coins);
+
+  let userStorage = JSON.parse(localStorage.getItem("users"));
   let {
-    user: { displayName, uid, balance },
+    user: { displayName, uid, photoURL },
   } = useContext(AuthContext);
-  const exchangeRateUTHToUsd = 4158.45;
+  let {
+    assetList: { list },
+  } = useContext(AssetContext);
+  const exchangeRateUTHToUsd = 4158;
+
   const handleClickHeading = (e) => {
     document
       .querySelectorAll(".heading .title")
@@ -193,7 +214,6 @@ export default function Dashboard() {
       'Sao chép địa chỉ ví thành công !\nĐịa chỉ ví của bạn là "' + uid + '"'
     );
   };
-
   return (
     <Wrapper>
       <PublicKey>
@@ -210,8 +230,10 @@ export default function Dashboard() {
       <FunctionWrapper>
         <div className="summary">
           <img className="img" src={eth} alt="" />
-          <span className="eth">{balance} ETH</span>
-          <span className="usd">{balance * exchangeRateUTHToUsd} USD</span>
+          <span className="eth">{uid ? list[0].quantity : ""} ETH</span>
+          <span className="usd">
+            {uid ? list[0].quantity * exchangeRateUTHToUsd : 0} USD
+          </span>
         </div>
         <div className="function">
           <Link to="/buy" className="item">
@@ -252,14 +274,18 @@ export default function Dashboard() {
           <div className="title ">Hoạt động</div>
         </div>
         <div className="assets__wrapper">
-          {userStorage.map((user, index) => (
-            <Asset
-              code={user.asset[0].code}
-              logoURL={user.asset[0].code}
-              quantity={user.asset[0].quantity}
-              key={index}
-            />
-          ))}
+          {uid
+            ? list.map((user, index) => {
+                return (
+                  <Asset
+                    key={index}
+                    code={user.code}
+                    logoURL={user.logoURL}
+                    quantity={user.quantity}
+                  />
+                );
+              })
+            : ""}
         </div>
         <div className="activities_wrapper hide">
           <Activity
@@ -275,3 +301,5 @@ export default function Dashboard() {
     </Wrapper>
   );
 }
+
+export default Dashboard;

@@ -27,8 +27,8 @@ export default function ModalToken({ token, active }) {
   return (
     <TokenRow className={`token-row ${active ? "active" : ""}`}>
       {listToken.map(
-        (item) =>
-          item.name === token && <img className="img" src={item.logo} alt="" />
+        (item, index) =>
+          item.name === token && <img className="img" key={index} src={item.logo} alt="" />
       )}
       <span className="name">{token}</span>
     </TokenRow>

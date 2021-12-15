@@ -12,7 +12,9 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState({});
   let navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const balance = useRef(124.12);
+
+  const assetUser = useRef(0);
+
   async function readData(uid) {
     let arrs = [];
     const querySnapshot = await getDocs(collection(db, "users"));
@@ -21,18 +23,18 @@ function AuthProvider({ children }) {
     });
     localStorage.setItem("users", JSON.stringify(arrs));
   }
+  
   useEffect(() => {
     const unsubscibed = auth.onAuthStateChanged((user) => {
       if (user) {
+        
         const { displayName, email, uid, photoURL } = user;
         readData(uid);
-
         setUser({
           displayName,
           email,
           uid,
           photoURL,
-          balance: balance.current,
         });
         setIsLoading(false);
         return;

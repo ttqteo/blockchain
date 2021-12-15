@@ -1,12 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { memo, useContext, useState } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import { Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
+import { AssetContext } from "../Context/AssetProvider";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import ModalToken from "../components/ModalToken";
+
+import { Select } from 'antd';
+const { Option } = Select;
 
 const Wrapper = styled.div`
   max-width: 874px;
@@ -135,38 +139,78 @@ const TokenInputWrapper = styled.div`
   }
 `;
 
-export default function Send() {
+function Send() {
   let navigate = useNavigate();
 
   let {
-    user: { displayName, uid, balance },
+    user: { uid },
   } = useContext(AuthContext);
+  let {assetList: {list}} = useContext(AssetContext)
   let userStorage = JSON.parse(localStorage.getItem("users"));
+  const coinCodeData = ['ETH','BNB','BTC','ADA','SOL','USD'];
+  const [selectedCoin, setSelectedCoin] = useState(coinCodeData[0]);
+  console.log(selectedCoin)
   const [receiver, setReceiver] = useState("");
   const [quantity, setQuantity] = useState(0);
   const handleTransaction = () => {
     alert("Gửi thành công !");
     userStorage.map((user) => {
       if (user.uid === receiver) {
-        user.balance = user.balance + parseInt(quantity);
+        // xử lí asset mới của ng nhận
+        let userReceiver = user.asset
+        let assetReceiver = []
+        userReceiver.map((item)=>{
+          if (item.code !== selectedCoin) {
+            return assetReceiver.push(item)
+          }else{
+            console.log(item.quantity)
+            assetReceiver = [
+              ...assetReceiver,
+              {
+                code: item.code,
+                quantity: item.quantity + parseInt(quantity),
+                logoURL: item.logoURL
+              }
+            ]
+          }
+        })
+        // Lưu dữ liệu người nhận lên firebase
         setDoc(doc(db, "users", user.uid), {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
           uid: user.uid,
-          providerId: user.providerId,
-          balance: user.balance,
+          asset: assetReceiver,
+          createdAt: user.createdAt,
+          activity: user.activity,
         });
       }
       if (user.uid === uid) {
-        user.balance = user.balance - parseInt(quantity);
+        // xử lí asset mới của ng gửi
+        let assetSender = []
+        user.asset.map((item)=>{
+          if (item.code !== selectedCoin ) {
+            return assetSender.push(item)
+          }else{
+            console.log(item.quantity)
+            assetSender = [
+              ...assetSender,
+              {
+                code: item.code,
+                quantity:item.quantity - parseInt(quantity),
+                logoURL: item.logoURL
+              }
+            ]
+          }
+        })
         setDoc(doc(db, "users", user.uid), {
           displayName: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
           uid: user.uid,
-          providerId: user.providerId,
-          balance: user.balance,
+          asset: assetSender,
+          createdAt: user.createdAt,
+          activity: user.activity,
         });
       }
     });
@@ -203,13 +247,30 @@ export default function Send() {
           />
         </InputWrapper>
         <TokenInputWrapper>
-          <div className="typeToken min" onClick={handleToggleList}>
+          {/* <div className="typeToken min" onClick={handleToggleList}>
             <ModalToken token="ETH" active />
             <ModalToken token="BNB" />
             <ModalToken token="BTC" />
             <ModalToken token="ADA" />
             <ModalToken token="SOL" />
-          </div>
+           
+          </div> */}
+          <Select
+            showSearch
+            style={{ width: 70 }}
+            placeholder="Search to Select"
+            optionFilterProp="children"
+            onChange={(e)=>{setSelectedCoin(e)}}
+          
+          >
+            <Option value="ETH">ETH</Option>
+            <Option value="BTC">BTC</Option>
+            <Option value="BNB">BNB</Option>
+            <Option value="SOL">SOL</Option>
+            <Option value="ADA">ADA</Option>
+            <Option value="USD">USD</Option>
+          </Select>,
+
           <Input
             className="inputType"
             placeholder="Số lượng Token"
@@ -230,3 +291,5 @@ export default function Send() {
     </Wrapper>
   );
 }
+
+export default memo(Send)

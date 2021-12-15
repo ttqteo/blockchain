@@ -39,10 +39,7 @@ const Row = styled.div`
 export default function Asset({ logoURL, quantity, code }) {
   return (
     <Row>
-      {listToken.map(
-        (item) =>
-          item.name === code && <img src={item.logo} className="img" alt="" />
-      )}
+      <img src={logoURL} className="img" alt="logo" />
       <div className="text">
         <span className="token">
           {" "}
