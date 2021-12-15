@@ -10,6 +10,7 @@ import Swap from "./pages/Swap";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AuthProvider from "./Context/AuthProvider";
+import Copyright from "./components/Copyright";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/swap" element={<Swap />} />
             <Route path="/" element={<Dashboard />} />
           </Routes>
+          <Copyright />
         </AuthProvider>
       </BrowserRouter>
     </div>

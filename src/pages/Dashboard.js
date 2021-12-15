@@ -1,23 +1,25 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
-// import { user } from "../firebase/api.js";
-import eth from "../assets/eth_logo.png";
+import eth from "../assets/token/eth.png";
 import Asset from "../components/Asset.js";
 import Activity from "../components/Activity.js";
 import { Link } from "react-router-dom";
-import {auth} from "../firebase/config";
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
+
 const Wrapper = styled.div`
-  width: 874px;
-  height: calc(100vh - 88px);
+  max-width: 874px;
+  height: 100%;
   margin: 8px auto 0;
   background-color: #fff;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   border: 2px solid #ccc;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  @media (max-width: 768px) {
+    margin: 0 auto;
+  }
 `;
 
 const PublicKey = styled.div`
@@ -161,8 +163,11 @@ const AAWrapper = styled.div`
 `;
 
 export default function Dashboard() {
+  let navigate = useNavigate();
+  let userStorage = JSON.parse(localStorage.getItem("users"));
+
   let {
-    user: { displayName, uid, balance},
+    user: { displayName, uid, balance },
   } = useContext(AuthContext);
   const exchangeRateUTHToUsd = 4158.45;
   const handleClickHeading = (e) => {
@@ -182,23 +187,31 @@ export default function Dashboard() {
     });
   };
 
+  const handleCopyWallet = (uid) => {
+    navigator.clipboard.writeText(uid);
+    alert(
+      'Sao chép địa chỉ ví thành công !\nĐịa chỉ ví của bạn là "' + uid + '"'
+    );
+  };
+
   return (
-   
     <Wrapper>
       <PublicKey>
-        <div className="info">
+        <div className="info" onClick={() => handleCopyWallet(uid)}>
           <span className="name"> {displayName} </span>
-          <span className="key"> {uid} </span>
-          <Button
-            onClick={()=>auth.signOut()}
-           >thoát</Button>
+          <span className="key">
+            {" "}
+            {`${uid ? uid.substring(0, 4) : ""} ... ${
+              uid ? uid.substring(uid.length - 4, uid.length) : ""
+            }`}{" "}
+          </span>
         </div>
       </PublicKey>
       <FunctionWrapper>
         <div className="summary">
-          <img className="img" src={eth} alt='' />
+          <img className="img" src={eth} alt="" />
           <span className="eth">{balance} ETH</span>
-          <span className="usd">{balance*exchangeRateUTHToUsd} USD</span>
+          <span className="usd">{balance * exchangeRateUTHToUsd} USD</span>
         </div>
         <div className="function">
           <Link to="/buy" className="item">
@@ -206,7 +219,7 @@ export default function Dashboard() {
               type="primary"
               shape="circle"
               size="large"
-              icon={<i class="fas fa-dollar-sign"></i>}
+              icon={<i className="fas fa-dollar-sign"></i>}
               className="function-button"
             />
             <span>Mua</span>
@@ -216,7 +229,7 @@ export default function Dashboard() {
               type="primary"
               shape="circle"
               size="large"
-              icon={<i class="far fa-paper-plane"></i>}
+              icon={<i className="far fa-paper-plane"></i>}
               className="function-button"
             />
             <span>Gửi</span>
@@ -226,7 +239,7 @@ export default function Dashboard() {
               type="primary"
               shape="circle"
               size="large"
-              icon={<i class="fas fa-sync-alt"></i>}
+              icon={<i className="fas fa-sync-alt"></i>}
               className="function-button"
             />
             <span>Đổi</span>
@@ -239,18 +252,14 @@ export default function Dashboard() {
           <div className="title ">Hoạt động</div>
         </div>
         <div className="assets__wrapper">
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <Asset name="ETH" value="2" />
-          <div className="button">
-            <Button type="primary" shape="round" size="large">
-              Thêm đồng mới
-            </Button>
-          </div>
+          {userStorage.map((user, index) => (
+            <Asset
+              code={user.asset[0].code}
+              logoURL={user.asset[0].code}
+              quantity={user.asset[0].quantity}
+              key={index}
+            />
+          ))}
         </div>
         <div className="activities_wrapper hide">
           <Activity
@@ -261,35 +270,6 @@ export default function Dashboard() {
             token2=""
             date="12:15PM Nov 10th, 2021"
           />
-          <Activity
-            type="swap"
-            wallet=""
-            token1="ETH"
-            value="100"
-            token2="BNB"
-            date="12:15PM Nov 10th, 2021"
-          />
-          <Activity
-            type="send"
-            wallet="0x1234...abcd"
-            token1="ETH"
-            value="100"
-            token2=""
-            date="12:15PM Nov 10th, 2021"
-          />
-          <Activity
-            type="receive"
-            wallet="0x1234...abcd"
-            token1="ETH"
-            value="100"
-            token2=""
-            date="12:15PM Nov 10th, 2021"
-          />
-          <div className="button">
-            <Button type="primary" shape="round" size="large">
-              Thêm giao dịch mới
-            </Button>
-          </div>
         </div>
       </AAWrapper>
     </Wrapper>

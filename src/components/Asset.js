@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import ETH from "../assets/eth_logo.png";
+import listToken from "../firebase/tokenList";
 
 const Row = styled.div`
   width: 100%;
@@ -29,18 +29,28 @@ const Row = styled.div`
     line-height: 32px;
     font-weight: bold;
   }
+  @media (max-width: 768px) {
+    .text .token {
+      font-size: 24px;
+      line-height: 28px;
+    }
 `;
 
-export default function Asset({ name, value }) {
+export default function Asset({ logoURL, quantity, code }) {
   return (
     <Row>
-      <img src={ETH} className="img" alt=""/>
+      {listToken.map(
+        (item) =>
+          item.name === code && <img src={item.logo} className="img" alt="" />
+      )}
       <div className="text">
         <span className="token">
           {" "}
-          {value} {name}
+          {quantity} {code}
         </span>
-        <span className="usd">$6.600 USD</span>
+        <span className="usd">
+          $<span id="toUsd">6.600</span> USD
+        </span>
       </div>
     </Row>
   );

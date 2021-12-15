@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthProvider";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 const Wrapper = styled.div`
-  width: 874px;
+  max-width: 874px;
   margin: 8px auto 0;
   background-color: #fff;
   border-radius: 20px;
   border: 2px solid #ccc;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  @media (max-width: 768px) {
+    margin: 0 auto;
+  }
 `;
 
 const HeadingWrapper = styled.div`
@@ -36,6 +42,12 @@ const HeadingWrapper = styled.div`
   }
   .back:hover {
     filter: brightness(1.1);
+  }
+  @media (max-width: 375px) {
+    .back {
+      font-size: 18px;
+      right: 20px;
+    }
   }
 `;
 
@@ -67,7 +79,7 @@ const FunctionWrapper = styled.div`
   .usdController .plus:hover {
     filter: brightness(1.1);
   }
-  .usdController .money {
+  .usdController .money-wrapper {
     font-size: 40px;
     font-weight: bold;
     margin: 0 16px;
@@ -85,12 +97,38 @@ const FunctionWrapper = styled.div`
 `;
 
 export default function Buy() {
+  let navigate = useNavigate();
+  let userStorage = JSON.parse(localStorage.getItem("users"));
+  const [cash, setCash] = useState(0);
+  let {
+    user: { uid },
+  } = useContext(AuthContext);
+
+  const handleBuy = () => {
+    const value = parseInt(document.getElementById("money").innerText);
+    alert("Bạn đã mua " + value + " USD");
+    userStorage.map((user) => {
+      if (user.uid === uid) {
+        setDoc(doc(db, "users", uid), {
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          uid: user.uid,
+          providerId: user.providerId,
+          balance: parseInt(user.balance) + value,
+        });
+      }
+    });
+    setCash(0);
+    navigate("/");
+  };
+
   return (
     <Wrapper>
       <HeadingWrapper>
         <span className="name">Mua</span>
         <Link to="/" className="back">
-          <i class="fas fa-angle-left back-icon"></i>Quay lại
+          <i className="fas fa-angle-left back-icon"></i>Quay lại
         </Link>
       </HeadingWrapper>
       <FunctionWrapper>
@@ -101,22 +139,35 @@ export default function Buy() {
             type="ghost"
             shape="circle"
             className="minus"
-            icon={<i class="fas fa-minus"></i>}
+            icon={<i className="fas fa-minus"></i>}
+            onClick={() => setCash(cash - 1)}
           />
-          <span className="money">$0.00</span>
+          <div className="money-wrapper">
+            $
+            <span
+              id="money"
+              contentEditable="true"
+              onKeyPress={(e) => e.code === "Enter" && e.preventDefault()}
+              suppressContentEditableWarning={true}
+            >
+              {cash}
+            </span>
+          </div>
           <Button
             size="large"
             type="primary"
             shape="circle"
             className="plus"
-            icon={<i class="fas fa-plus"></i>}
+            icon={<i className="fas fa-plus"></i>}
+            onClick={() => setCash(cash + 1)}
           />
         </div>
         <Button
           size="large"
           type="primary"
           shape="round"
-          className="end-button "
+          className="end-button"
+          onClick={handleBuy}
         >
           Hoàn tất
         </Button>

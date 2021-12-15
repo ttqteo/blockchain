@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import ETH from "../assets/eth_logo.png";
+import listToken from "../firebase/tokenList";
+import { AuthContext } from "../Context/AuthProvider";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 const Row = styled.div`
   width: 100%;
@@ -34,8 +37,28 @@ const Row = styled.div`
     font-size: 18px;
     font-style: italic;
     font-weight: medium;
-    width: 300px;
+    max-width: 300px;
   }
+  @media (max-width: 768px) {
+    .text .message {
+      font-size: 24px;
+      line-height: 28px;
+    }
+    .date {
+      font-size: 14px;
+    }
+  @media (max-width: 375px) {
+    .text .message {
+      font-size: 20px;
+      line-height: 20px;
+      padding-right: 8px;
+    }
+    .date {
+      font-size: 14px;
+    }
+    .text {
+      font-size: 14px;
+    }
 `;
 
 export default function Activity({
@@ -46,9 +69,26 @@ export default function Activity({
   value,
   date,
 }) {
+  let userStorage = JSON.parse(localStorage.getItem("users"));
   return (
     <Row>
-      <img src={ETH} className="img" alt="logo"/>
+      {type === "buy" ? (
+        <img src={listToken[3].logo} className="img" alt="logo" />
+      ) : type === "swap" ? (
+        listToken.map(
+          (item) =>
+            item.name === token2 && (
+              <img src={item.logo} className="img" alt="logo" />
+            )
+        )
+      ) : (
+        listToken.map(
+          (item) =>
+            item.name === token1 && (
+              <img src={item.logo} className="img" alt="logo" />
+            )
+        )
+      )}
       <div className="text">
         <span className="message">
           Bạn đã{" "}

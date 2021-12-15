@@ -2,16 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import { Input } from "antd";
-import eth from "../assets/eth_logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ModalToken from "../components/ModalToken";
 
+
+import { doc, setDoc, set } from "firebase/firestore";
+import { db } from "../firebase/config";
 const Wrapper = styled.div`
-  width: 874px;
+  max-width: 874px;
   margin: 8px auto 0;
   background-color: #fff;
   border-radius: 20px;
   border: 2px solid #ccc;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  @media (max-width: 768px) {
+    margin: 0 auto;
+  }
 `;
 
 const HeadingWrapper = styled.div`
@@ -38,6 +44,12 @@ const HeadingWrapper = styled.div`
   }
   .back:hover {
     filter: brightness(1.1);
+  }
+  @media (max-width: 375px) {
+    .back {
+      font-size: 18px;
+      right: 20px;
+    }
   }
 `;
 
@@ -76,29 +88,34 @@ const TokenWrapper = styled.div`
 
 const TokenInputWrapper = styled.div`
   position: relative;
-  .typeToken {
+  margin-top: 4px;
+  .typeToken1,
+  .typeToken2 {
     position: absolute;
     z-index: 99;
     width: 118px;
-    border-right: 2px solid #d9d9d9;
-    height: 60px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     cursor: pointer;
+    border: 1px solid #d9d9d9;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background: #fff;
+    min-height: 60px;
   }
-  .typeToken .img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px solid #333;
-    padding: 4px;
-    margin-left: 12px;
+  .typeToken1.min,
+  .typeToken2.min {
+    overflow: hidden;
+    height: 60px;
   }
-  .typeToken .name {
-    font-size: 24px;
-    line-height: 24px;
-    font-weight: bold;
-    margin-left: 6px;
+  .typeToken1.min .token-row,
+  .typeToken2.min .token-row {
+    display: none;
+  }
+  .typeToken1 .token-row.active,
+  .typeToken2 .token-row.active {
+    display: flex;
   }
   .inputType {
     width: 315px;
@@ -112,6 +129,42 @@ const TokenInputWrapper = styled.div`
 `;
 
 export default function Swap() {
+  let navigate = useNavigate();
+  const addDoc = () => {
+    setDoc(doc(db, "blockchain","12345466"), {
+      name: {
+        ho:"vo van",
+        ten:"quang",
+      },
+      age:22
+    });
+  }
+  const handleToggleList1 = (e) => {
+    document
+      .querySelector(".typeToken1 .token-row.active")
+      .classList.remove("active");
+    const tokenList = document.querySelectorAll(".typeToken1 .token-row");
+    const activeItem = e.target.closest(".typeToken1 .token-row");
+    tokenList.forEach((item) =>
+      item.classList.toggle("active", activeItem === item)
+    );
+    document.querySelector(".typeToken1").classList.toggle("min");
+  };
+  const handleToggleList2 = (e) => {
+    document
+      .querySelector(".typeToken2 .token-row.active")
+      .classList.remove("active");
+    const tokenList = document.querySelectorAll(".typeToken2 .token-row");
+    const activeItem = e.target.closest(".typeToken2 .token-row");
+    tokenList.forEach((item) =>
+      item.classList.toggle("active", activeItem === item)
+    );
+    document.querySelector(".typeToken2").classList.toggle("min");
+  };
+  const handleSwap = () => {
+    alert("Chuyển đổi thành công !");
+    navigate("/");
+  };
   return (
     <Wrapper>
       <HeadingWrapper>
@@ -124,9 +177,17 @@ export default function Swap() {
         <TokenWrapper>
           <span className="heading">Chuyển từ</span>
           <TokenInputWrapper>
-            <div className="typeToken">
-              <img className="img" src={eth} alt="" />
-              <span className="name">ETH</span>
+            <div
+              className="typeToken1 min"
+              onClick={handleToggleList1}
+              style={{ zIndex: "100" }}
+            >
+              <ModalToken token="ETH" active />
+              <ModalToken token="BNB" />
+              <ModalToken token="BTC" />
+              <ModalToken token="ADA" />
+              <ModalToken token="SOL" />
+              <ModalToken token="USD" />
             </div>
             <Input className="inputType" placeholder="Số lượng Token" />
           </TokenInputWrapper>
@@ -135,9 +196,13 @@ export default function Swap() {
         <TokenWrapper>
           <span className="heading">Thành</span>
           <TokenInputWrapper>
-            <div className="typeToken">
-              <img className="img" src={eth} alt=""/>
-              <span className="name">ETH</span>
+            <div className="typeToken2 min" onClick={handleToggleList2}>
+              <ModalToken token="ETH" active />
+              <ModalToken token="BNB" />
+              <ModalToken token="BTC" />
+              <ModalToken token="ADA" />
+              <ModalToken token="SOL" />
+              <ModalToken token="USD" />
             </div>
             <Input className="inputType" placeholder="Số lượng Token" />
           </TokenInputWrapper>
@@ -147,6 +212,7 @@ export default function Swap() {
           type="primary"
           shape="round"
           className="end-button"
+          onClick={addDoc}
         >
           Chuyển
         </Button>
