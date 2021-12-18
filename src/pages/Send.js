@@ -1,15 +1,13 @@
 import React, { memo, useContext, useState } from "react";
 import styled from "styled-components";
-import { Button } from "antd";
-import { Input } from "antd";
+import { AutoComplete, Button, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import { AssetContext } from "../Context/AssetProvider";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
-import ModalToken from "../components/ModalToken";
+import listToken from "../firebase/tokenList";
 
-import { Select } from 'antd';
 const { Option } = Select;
 
 const Wrapper = styled.div`
@@ -73,69 +71,19 @@ const FunctionWrapper = styled.div`
   .end-button:hover {
     filter: brightness(1.1);
   }
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-  margin-top: 32px;
-  .type {
-    position: absolute;
-    z-index: 99;
-    top: -12px;
-    left: 24px;
-    height: 24px;
-    background-color: #0074dc;
-    padding: 0 24px;
-    font-size: 16px;
-    color: #fff;
-    border-radius: 20px;
-  }
-  .inputType {
+  .inputWallet {
+    margin-top: 32px;
     width: 315px;
-    height: 60px;
-    border-radius: 20px;
-    font-size: 20px;
   }
-  .inputType:valid {
-    padding-left: 16px;
-  }
-`;
-
-const TokenInputWrapper = styled.div`
-  position: relative;
-  margin-top: 32px;
-  .typeToken {
-    position: absolute;
-    z-index: 99;
-    width: 118px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    border: 1px solid #d9d9d9;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    background: #fff;
-    min-height: 60px;
-  }
-  .typeToken.min {
-    overflow: hidden;
-    height: 60px;
-  }
-  .typeToken.min .token-row {
-    display: none;
-  }
-  .typeToken .token-row.active {
-    display: flex;
-  }
-  .inputType {
+  .inputToken {
+    margin-top: 32px;
     width: 315px;
-    height: 60px;
-    border-radius: 20px;
-    font-size: 20px;
-  }
-  .inputType:valid {
-    padding-left: 135px;
+    .ant-select-selector {
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      padding-bottom: 4px;
+    }
   }
 `;
 
@@ -145,11 +93,12 @@ function Send() {
   let {
     user: { uid },
   } = useContext(AuthContext);
-  let {assetList: {list}} = useContext(AssetContext)
+  let {
+    assetList: { list },
+  } = useContext(AssetContext);
   let userStorage = JSON.parse(localStorage.getItem("users"));
-  const coinCodeData = ['ETH','BNB','BTC','ADA','SOL','USD'];
+  const coinCodeData = ["ETH", "BNB", "BTC", "ADA", "SOL", "USD"];
   const [selectedCoin, setSelectedCoin] = useState(coinCodeData[0]);
-  console.log(selectedCoin)
   const [receiver, setReceiver] = useState("");
   const [quantity, setQuantity] = useState(0);
   const handleTransaction = () => {
@@ -157,23 +106,23 @@ function Send() {
     userStorage.map((user) => {
       if (user.uid === receiver) {
         // xử lí asset mới của ng nhận
-        let userReceiver = user.asset
-        let assetReceiver = []
-        userReceiver.map((item)=>{
+        let userReceiver = user.asset;
+        let assetReceiver = [];
+        userReceiver.map((item) => {
           if (item.code !== selectedCoin) {
-            return assetReceiver.push(item)
-          }else{
-            console.log(item.quantity)
+            return assetReceiver.push(item);
+          } else {
+            console.log(item.quantity);
             assetReceiver = [
               ...assetReceiver,
               {
                 code: item.code,
                 quantity: item.quantity + parseInt(quantity),
-                logoURL: item.logoURL
-              }
-            ]
+                logoURL: item.logoURL,
+              },
+            ];
           }
-        })
+        });
         // Lưu dữ liệu người nhận lên firebase
         setDoc(doc(db, "users", user.uid), {
           displayName: user.displayName,
@@ -187,22 +136,22 @@ function Send() {
       }
       if (user.uid === uid) {
         // xử lí asset mới của ng gửi
-        let assetSender = []
-        user.asset.map((item)=>{
-          if (item.code !== selectedCoin ) {
-            return assetSender.push(item)
-          }else{
-            console.log(item.quantity)
+        let assetSender = [];
+        user.asset.map((item) => {
+          if (item.code !== selectedCoin) {
+            return assetSender.push(item);
+          } else {
+            console.log(item.quantity);
             assetSender = [
               ...assetSender,
               {
                 code: item.code,
-                quantity:item.quantity - parseInt(quantity),
-                logoURL: item.logoURL
-              }
-            ]
+                quantity: item.quantity - parseInt(quantity),
+                logoURL: item.logoURL,
+              },
+            ];
           }
-        })
+        });
         setDoc(doc(db, "users", user.uid), {
           displayName: user.displayName,
           email: user.email,
@@ -216,18 +165,10 @@ function Send() {
     });
     setQuantity(0);
     setReceiver("");
+    window.location.reload();
     navigate("/");
   };
 
-  const handleToggleList = (e) => {
-    document.querySelector(".token-row.active").classList.remove("active");
-    const tokenList = document.querySelectorAll(".token-row");
-    const activeItem = e.target.closest(".token-row");
-    tokenList.forEach((item) =>
-      item.classList.toggle("active", activeItem === item)
-    );
-    document.querySelector(".typeToken").classList.toggle("min");
-  };
   return (
     <Wrapper>
       <HeadingWrapper>
@@ -237,47 +178,89 @@ function Send() {
         </Link>
       </HeadingWrapper>
       <FunctionWrapper>
-        <InputWrapper>
-          <div className="type">Gửi đến ví</div>
-          <Input
-            className="inputType"
-            placeholder="Nhập ví cần gửi"
-            value={receiver}
-            onChange={(e) => setReceiver(e.target.value)}
-          />
-        </InputWrapper>
-        <TokenInputWrapper>
-          {/* <div className="typeToken min" onClick={handleToggleList}>
-            <ModalToken token="ETH" active />
-            <ModalToken token="BNB" />
-            <ModalToken token="BTC" />
-            <ModalToken token="ADA" />
-            <ModalToken token="SOL" />
-           
-          </div> */}
+        <Input
+          className="inputWallet"
+          placeholder="Nhập ví cần gửi"
+          value={receiver}
+          onChange={(e) => setReceiver(e.target.value)}
+          allowClear
+          size="large"
+        />
+        <Input.Group size="large" compact className="inputToken">
           <Select
-            showSearch
-            style={{ width: 70 }}
-            placeholder="Search to Select"
-            optionFilterProp="children"
-            onChange={(e)=>{setSelectedCoin(e)}}
-          
+            style={{ width: "35%" }}
+            defaultValue="ETH"
+            onChange={(e) => {
+              setSelectedCoin(e);
+            }}
           >
-            <Option value="ETH">ETH</Option>
-            <Option value="BTC">BTC</Option>
-            <Option value="BNB">BNB</Option>
-            <Option value="SOL">SOL</Option>
-            <Option value="ADA">ADA</Option>
-            <Option value="USD">USD</Option>
-          </Select>,
-
-          <Input
-            className="inputType"
+            <Option value="ETH">
+              <img
+                src={listToken[0].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              ETH
+            </Option>
+            <Option value="BNB">
+              <img
+                src={listToken[1].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              BNB
+            </Option>
+            <Option value="BTC">
+              <img
+                src={listToken[2].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              BTC
+            </Option>
+            <Option value="USD">
+              <img
+                src={listToken[3].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              USD
+            </Option>
+            <Option value="ADA">
+              <img
+                src={listToken[4].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              ADA
+            </Option>
+            <Option value="SOL">
+              <img
+                src={listToken[5].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              SOL
+            </Option>
+          </Select>
+          <AutoComplete
+            style={{ width: "65%" }}
             placeholder="Số lượng Token"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            options={[{ value: "10" }, { value: "100" }]}
           />
-        </TokenInputWrapper>
+        </Input.Group>
         <Button
           size="large"
           type="primary"
@@ -292,4 +275,4 @@ function Send() {
   );
 }
 
-export default memo(Send)
+export default memo(Send);

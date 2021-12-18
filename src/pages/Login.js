@@ -55,14 +55,6 @@ export default function Login() {
         const user = result.user;
         const data = getAdditionalUserInfo(result);
         if (data?.isNewUser) {
-          // addDocument("users", {
-          //   displayName: user.displayName,
-          //   email: user.email,
-          //   photoURL: user.photoURL,
-          //   uid: user.uid,
-          //   providerId: user.providerId,
-          //   balance: 100,
-          // });
           setDoc(doc(db, "users", user.uid), {
             uid: user.uid,
             displayName: user.displayName,
@@ -72,39 +64,45 @@ export default function Login() {
               {
                 code: "ETH",
                 quantity: 150,
-                logoURL: "https://cryptorunner.com/wp-content/uploads/2017/10/ethereum-symbol.png",
+                logoURL:
+                  "https://s2.coinmarketcap.com/static/img/coins/200x200/1027.png",
               },
               {
-               code: "BNB",
-               quantity: 17.5,
-               logoURL: "https://th.bing.com/th/id/OIP.joIRFGbuK3AsFH8pTSUnZgHaHa?pid=ImgDet&rs=1",
-             },
-             {
-               code: "BTC",
-               quantity: 143,
-               logoURL: "https://th.bing.com/th/id/OIP.gYEEYXuJLYw03cV0_ANzcwHaHa?pid=ImgDet&rs=1",
-             },
-             {
-               code: "ADA",
-               quantity: 27,
-               logoURL: "https://th.bing.com/th/id/OIP.bv3opyCP290QI6iGEjZsiQAAAA?pid=ImgDet&rs=1",
-             },
-             {
-               code: "SOL",
-               quantity: 68,
-               logoURL: "https://cdn2.vectorstock.com/i/thumb-large/22/21/solana-sol-token-symbol-cryptocurrency-logo-vector-39742221.jpg",
-             },
-             {
-               code: "USD",
-               quantity: 1000,
-               logoURL: "https://th.bing.com/th/id/R.3704b75bbdacf82e6c508f1ef1afd46f?rik=RMZ4CEQ4o%2bMpUA&pid=ImgRaw&r=0",
-             }
+                code: "BNB",
+                quantity: 17.5,
+                logoURL:
+                  "https://public.bnbstatic.com/20190405/eb2349c3-b2f8-4a93-a286-8f86a62ea9d8.png",
+              },
+              {
+                code: "BTC",
+                quantity: 143,
+                logoURL:
+                  "https://th.bing.com/th/id/OIP.gYEEYXuJLYw03cV0_ANzcwHaHa?pid=ImgDet&rs=1",
+              },
+              {
+                code: "ADA",
+                quantity: 27,
+                logoURL:
+                  "https://th.bing.com/th/id/OIP.bv3opyCP290QI6iGEjZsiQAAAA?pid=ImgDet&rs=1",
+              },
+              {
+                code: "SOL",
+                quantity: 68,
+                logoURL:
+                  "https://solana.com/branding/new/exchange/exchange-sq-black.png",
+              },
+              {
+                code: "USD",
+                quantity: 1000,
+                logoURL:
+                  "https://images.pngnice.com/download/2007/USD-PNG-Transparent.png",
+              },
             ],
             activity: {
-              buy:{
-                quantity:0,
+              buy: {
+                quantity: 0,
                 createdAt: serverTimestamp(),
-              }
+              },
             },
             createdAt: serverTimestamp(),
           });

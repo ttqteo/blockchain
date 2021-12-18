@@ -23,11 +23,10 @@ function AuthProvider({ children }) {
     });
     localStorage.setItem("users", JSON.stringify(arrs));
   }
-  
+
   useEffect(() => {
     const unsubscibed = auth.onAuthStateChanged((user) => {
       if (user) {
-        
         const { displayName, email, uid, photoURL } = user;
         readData(uid);
         setUser({

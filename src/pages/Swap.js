@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Button } from "antd";
-import { Input } from "antd";
+import { AutoComplete, Button, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import ModalToken from "../components/ModalToken";
-
-
+import listToken from "../firebase/tokenList";
 import { doc, setDoc, set } from "firebase/firestore";
 import { db } from "../firebase/config";
+const { Option } = Select;
+
 const Wrapper = styled.div`
   max-width: 874px;
   margin: 8px auto 0;
@@ -69,14 +68,10 @@ const FunctionWrapper = styled.div`
   .end-button:hover {
     filter: brightness(1.1);
   }
-`;
-
-const TokenWrapper = styled.div`
-  margin-top: 10px;
   .heading {
     font-size: 20px;
     font-weight: 600;
-    margin-left: 16px;
+    margin-top: 10px;
   }
   .description {
     font-size: 12px;
@@ -84,85 +79,32 @@ const TokenWrapper = styled.div`
     font-style: italic;
     margin-left: 16px;
   }
-`;
-
-const TokenInputWrapper = styled.div`
-  position: relative;
-  margin-top: 4px;
-  .typeToken1,
-  .typeToken2 {
-    position: absolute;
-    z-index: 99;
-    width: 118px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    border: 1px solid #d9d9d9;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    background: #fff;
-    min-height: 60px;
-  }
-  .typeToken1.min,
-  .typeToken2.min {
-    overflow: hidden;
-    height: 60px;
-  }
-  .typeToken1.min .token-row,
-  .typeToken2.min .token-row {
-    display: none;
-  }
-  .typeToken1 .token-row.active,
-  .typeToken2 .token-row.active {
-    display: flex;
-  }
-  .inputType {
+  .inputToken {
+    margin-top: 4px;
     width: 315px;
-    height: 60px;
-    border-radius: 20px;
-    font-size: 20px;
-  }
-  .inputType:valid {
-    padding-left: 135px;
+    .ant-select-selector {
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      padding-bottom: 4px;
+    }
   }
 `;
 
 export default function Swap() {
   let navigate = useNavigate();
   const addDoc = () => {
-    setDoc(doc(db, "blockchain","12345466"), {
+    setDoc(doc(db, "blockchain", "12345466"), {
       name: {
-        ho:"vo van",
-        ten:"quang",
+        ho: "vo van",
+        ten: "quang",
       },
-      age:22
+      age: 22,
     });
-  }
-  const handleToggleList1 = (e) => {
-    document
-      .querySelector(".typeToken1 .token-row.active")
-      .classList.remove("active");
-    const tokenList = document.querySelectorAll(".typeToken1 .token-row");
-    const activeItem = e.target.closest(".typeToken1 .token-row");
-    tokenList.forEach((item) =>
-      item.classList.toggle("active", activeItem === item)
-    );
-    document.querySelector(".typeToken1").classList.toggle("min");
-  };
-  const handleToggleList2 = (e) => {
-    document
-      .querySelector(".typeToken2 .token-row.active")
-      .classList.remove("active");
-    const tokenList = document.querySelectorAll(".typeToken2 .token-row");
-    const activeItem = e.target.closest(".typeToken2 .token-row");
-    tokenList.forEach((item) =>
-      item.classList.toggle("active", activeItem === item)
-    );
-    document.querySelector(".typeToken2").classList.toggle("min");
   };
   const handleSwap = () => {
     alert("Chuyển đổi thành công !");
+    window.location.reload();
     navigate("/");
   };
   return (
@@ -174,39 +116,147 @@ export default function Swap() {
         </Link>
       </HeadingWrapper>
       <FunctionWrapper>
-        <TokenWrapper>
-          <span className="heading">Chuyển từ</span>
-          <TokenInputWrapper>
-            <div
-              className="typeToken1 min"
-              onClick={handleToggleList1}
-              style={{ zIndex: "100" }}
-            >
-              <ModalToken token="ETH" active />
-              <ModalToken token="BNB" />
-              <ModalToken token="BTC" />
-              <ModalToken token="ADA" />
-              <ModalToken token="SOL" />
-              <ModalToken token="USD" />
-            </div>
-            <Input className="inputType" placeholder="Số lượng Token" />
-          </TokenInputWrapper>
-          <div className="description">Có 2.4545 ETH khả dụng</div>
-        </TokenWrapper>
-        <TokenWrapper>
-          <span className="heading">Thành</span>
-          <TokenInputWrapper>
-            <div className="typeToken2 min" onClick={handleToggleList2}>
-              <ModalToken token="ETH" active />
-              <ModalToken token="BNB" />
-              <ModalToken token="BTC" />
-              <ModalToken token="ADA" />
-              <ModalToken token="SOL" />
-              <ModalToken token="USD" />
-            </div>
-            <Input className="inputType" placeholder="Số lượng Token" />
-          </TokenInputWrapper>
-        </TokenWrapper>
+        <span className="heading">Chuyển từ</span>
+        <Input.Group size="large" compact className="inputToken">
+          <Select style={{ width: "35%" }} defaultValue="ETH">
+            <Option value="ETH">
+              <img
+                src={listToken[0].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              ETH
+            </Option>
+            <Option value="BNB">
+              <img
+                src={listToken[1].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              BNB
+            </Option>
+            <Option value="BTC">
+              <img
+                src={listToken[2].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              BTC
+            </Option>
+            <Option value="USD">
+              <img
+                src={listToken[3].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              USD
+            </Option>
+            <Option value="ADA">
+              <img
+                src={listToken[4].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              ADA
+            </Option>
+            <Option value="SOL">
+              <img
+                src={listToken[5].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              SOL
+            </Option>
+          </Select>
+          <AutoComplete
+            style={{ width: "65%" }}
+            placeholder="Số lượng Token"
+            options={[{ value: "10" }, { value: "100" }]}
+          />
+        </Input.Group>
+        <div className="description">Có 2.4545 ETH khả dụng</div>
+        <span className="heading">Thành</span>
+        <Input.Group size="large" compact className="inputToken">
+          <Select style={{ width: "35%" }} defaultValue="ETH">
+            <Option value="ETH">
+              <img
+                src={listToken[0].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              ETH
+            </Option>
+            <Option value="BNB">
+              <img
+                src={listToken[1].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              BNB
+            </Option>
+            <Option value="BTC">
+              <img
+                src={listToken[2].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              BTC
+            </Option>
+            <Option value="USD">
+              <img
+                src={listToken[3].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              USD
+            </Option>
+            <Option value="ADA">
+              <img
+                src={listToken[4].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              ADA
+            </Option>
+            <Option value="SOL">
+              <img
+                src={listToken[5].logo}
+                alt=""
+                style={{
+                  marginRight: "4px",
+                }}
+              />{" "}
+              SOL
+            </Option>
+          </Select>
+          <AutoComplete
+            style={{ width: "65%" }}
+            placeholder="Số lượng Token"
+            options={[{ value: "10" }, { value: "100" }]}
+          />
+        </Input.Group>
         <Button
           size="large"
           type="primary"

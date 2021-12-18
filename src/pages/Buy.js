@@ -105,28 +105,30 @@ export default function Buy() {
     user: { uid },
   } = useContext(AuthContext);
 
-  let {assetList: {list}} = useContext(AssetContext)
+  let {
+    assetList: { list },
+  } = useContext(AssetContext);
 
   const handleBuy = () => {
     const value = parseInt(document.getElementById("money").innerText);
     userStorage.map((user) => {
       if (user.uid === uid) {
         //xử lí mua
-        let assetBuy = []
-        list.map((item)=>{
+        let assetBuy = [];
+        list.map((item) => {
           if (item.code !== "USD") {
-            return assetBuy.push(item)
-          }else{
+            return assetBuy.push(item);
+          } else {
             assetBuy = [
               ...assetBuy,
               {
                 code: item.code,
                 quantity: item.quantity + value,
-                logoURL: item.logoURL
-              }
-            ]
+                logoURL: item.logoURL,
+              },
+            ];
           }
-        })
+        });
         // Lưu lại lên firebase
         setDoc(doc(db, "users", uid), {
           displayName: user.displayName,
@@ -140,9 +142,9 @@ export default function Buy() {
       }
     });
     alert("Bạn đã mua " + value + " USD");
-    setCash(0);
+    window.location.reload();
     navigate("/");
-
+    setCash(0);
   };
 
   return (
@@ -162,7 +164,7 @@ export default function Buy() {
             shape="circle"
             className="minus"
             icon={<i className="fas fa-minus"></i>}
-            onClick={() => setCash(cash - 1)}
+            onClick={() => cash >= 1 && setCash(cash - 1)}
           />
           <div className="money-wrapper">
             $

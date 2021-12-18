@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
-import eth from "../assets/token/eth.png";
+import eth from "../assets/token/eth_original.png";
 import Asset from "../components/Asset.js";
 import Activity from "../components/Activity.js";
 import { Link, Navigate } from "react-router-dom";
