@@ -9,7 +9,7 @@ Link deployed website: https://zen-lovelace-a38391.netlify.app/
 5. Transaction: coming soon
 6. Buy USD, Send Token, Swap Token: coming soon
 
-## local host
+## Front-End - localhost:3000
 
 ### `npm install`
 
@@ -22,6 +22,14 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
+
+## Back-End - localhost:8080
+
+1. Goes to Firebase to get specific key (download it and rename `serviceAccountKey.json`) 
+2. Moves to folder `blockchain/java/src/main/resources/`
+3. Start Spring Boot Project (via CRUDRunner)
+
+## REST API from React to Firebase via Spring Boot Java
 
 ## Copyright
 (C) 2021. Belongs to group 16, Java developing - FETEL HCMUS.\
