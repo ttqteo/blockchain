@@ -1,19 +1,19 @@
-package com.blockchain;
+package blockchain;
 
 import java.security.*;
 import java.util.ArrayList;
 
 public class Transaction {
 
-	public String transactionId; // this is also the hash of the transaction.
-	public PublicKey sender; // senders address/public key.
-	public PublicKey reciepient; // Recipients address/public key.
-	public float value;
-	public byte[] signature; // this is to prevent anybody else from spending
+	private String transactionId; // this is also the hash of the transaction.
+	private PublicKey sender; // senders address/public key.
+	private PublicKey reciepient; // Recipients address/public key.
+	private float value;
+	private byte[] signature; // this is to prevent anybody else from spending
 							// funds in our wallet.
 
-    public ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
-	public ArrayList<TransactionOutput> outputs = new ArrayList<TransactionOutput>();
+    private ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
+	private ArrayList<TransactionOutput> outputs = new ArrayList<TransactionOutput>();
 
 	private static int sequence = 0; // a rough count of how many transactions
 										// have been generated.
@@ -24,6 +24,70 @@ public class Transaction {
 		this.reciepient = to;
 		this.value = value;
 		this.inputs = inputs;
+	}
+
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	public PublicKey getSender() {
+		return sender;
+	}
+
+	public void setSender(PublicKey sender) {
+		this.sender = sender;
+	}
+
+	public PublicKey getReciepient() {
+		return reciepient;
+	}
+
+	public void setReciepient(PublicKey reciepient) {
+		this.reciepient = reciepient;
+	}
+
+	public float getValue() {
+		return value;
+	}
+
+	public void setValue(float value) {
+		this.value = value;
+	}
+
+	public byte[] getSignature() {
+		return signature;
+	}
+
+	public void setSignature(byte[] signature) {
+		this.signature = signature;
+	}
+
+	public ArrayList<TransactionInput> getInputs() {
+		return inputs;
+	}
+
+	public void setInputs(ArrayList<TransactionInput> inputs) {
+		this.inputs = inputs;
+	}
+
+	public ArrayList<TransactionOutput> getOutputs() {
+		return outputs;
+	}
+
+	public void setOutputs(ArrayList<TransactionOutput> outputs) {
+		this.outputs = outputs;
+	}
+
+	public static int getSequence() {
+		return sequence;
+	}
+
+	public static void setSequence(int sequence) {
+		Transaction.sequence = sequence;
 	}
 
 	// This Calculates the transaction hash (which will be used as its Id)
@@ -55,7 +119,7 @@ public class Transaction {
 
 			// gather transaction inputs (Make sure they are unspent):
 			for (TransactionInput i : inputs) {
-				i.UTXO = blockchain.UTXOs.get(i.transactionOutputId);
+				i.setUTXO(blockchain.UTXOs.get(i.getTransactionOutputId()));
 			}
 
 			// check if transaction is valid:
@@ -72,14 +136,14 @@ public class Transaction {
 
 			// add outputs to Unspent list
 			for (TransactionOutput o : outputs) {
-				blockchain.UTXOs.put(o.id, o);
+				blockchain.UTXOs.put(o.getId(), o);
 			}
 
 			// remove transaction inputs from UTXO lists as spent:
 			for (TransactionInput i : inputs) {
-				if (i.UTXO == null)
+				if (i.getUTXO() == null)
 					continue; // if Transaction can't be found skip it
-				blockchain.UTXOs.remove(i.UTXO.id);
+				blockchain.UTXOs.remove(i.getUTXO().getId());
 			}
 
 			return true;
@@ -89,9 +153,9 @@ public class Transaction {
 	public float getInputsValue() {
 			float total = 0;
 			for (TransactionInput i : inputs) {
-				if (i.UTXO == null)
+				if (i.getUTXO() == null)
 					continue; // if Transaction can't be found skip it
-				total += i.UTXO.value;
+				total += i.getUTXO().getValue();
 			}
 			return total;
 		}
@@ -100,7 +164,7 @@ public class Transaction {
 	public float getOutputsValue() {
 			float total = 0;
 			for (TransactionOutput o : outputs) {
-				total += o.value;
+				total += o.getValue();
 			}
 			return total;
 		}

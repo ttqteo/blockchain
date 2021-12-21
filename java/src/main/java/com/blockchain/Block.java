@@ -1,15 +1,65 @@
-package com.blockchain;
+package blockchain;
 import java.util.ArrayList;
 import java.util.Date;
 
 
 public class Block {
-	public String hash;
-	public String previousHash;
-	public String merkleRoot;
-	public ArrayList<Transaction> transactions = new ArrayList<Transaction>(); //our data will be a simple message.
+	private String hash;
+	private String previousHash;
+	private String merkleRoot;
 	private long timeStamp; // as number of milliseconds since 1/1/1970.
 	private int nonce;
+	private ArrayList<Transaction> transactions = new ArrayList<Transaction>(); //our data will be a simple message.
+	public Object getHash;
+	//public Object getTransactions;
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
+
+	public String getPreviousHash() {
+		return previousHash;
+	}
+
+	public void setPreviousHash(String previousHash) {
+		this.previousHash = previousHash;
+	}
+
+	public String getMerkleRoot() {
+		return merkleRoot;
+	}
+
+	public void setMerkleRoot(String merkleRoot) {
+		this.merkleRoot = merkleRoot;
+	}
+
+	public ArrayList<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(ArrayList<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
+	public long getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(long timeStamp) {
+		this.timeStamp = timeStamp;
+	}
+
+	public int getNonce() {
+		return nonce;
+	}
+
+	public void setNonce(int nonce) {
+		this.nonce = nonce;
+	}
 
 	public Block(String previousHash) {
 		this.previousHash = previousHash;

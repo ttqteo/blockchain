@@ -1,4 +1,4 @@
-package com.blockchain;
+package blockchain;
 
 import java.security.MessageDigest;
 import java.security.Key;
@@ -66,7 +66,7 @@ public class StringUtil {
 			int count = transactions.size();
 			ArrayList<String> previousTreeLayer = new ArrayList<String>();
 			for (Transaction transaction : transactions) {
-				previousTreeLayer.add(transaction.transactionId);
+				previousTreeLayer.add(transaction.getTransactionId());
 			}
 			ArrayList<String> treeLayer = previousTreeLayer;
 			while (count > 1) {
