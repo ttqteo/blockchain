@@ -1,6 +1,7 @@
 package com.blockchain;
 
 import java.io.IOException;
+import java.security.Security;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +28,49 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CRUDService {
+	public static ArrayList<Block> blockchain = new ArrayList<Block>();
+	public static HashMap<String,TransactionOutput> UTXOs = new HashMap<String,TransactionOutput>(); //list of all unspent transactions. 
+  static { Security.addProvider(new BouncyCastleProvider()); }
+	public static Transaction genesisTransaction;
+	public static float minimumTransaction = 0.1f;
+  public static int difficulty = 3;
+
+  public static void addBlock(Block newBlock) {
+		newBlock.mineBlock(difficulty);
+		blockchain.add(newBlock);
+	}
+
+  public String signupCRUD(String uid) throws InterruptedException, ExecutionException {
+    Firestore db = FirestoreClient.getFirestore();
+    DocumentReference docRef = db.collection("users").document(uid);
+    ApiFuture<DocumentSnapshot> future = docRef.get();
+    DocumentSnapshot document = future.get();
+    if (document.exists()) {
+      Wallet wallet = new Wallet();
+		  Wallet coinbase = new Wallet();
+      //create genesis transaction, which sends 100 NoobCoin to walletA: 
+      genesisTransaction = new Transaction(coinbase.getPublicKey(), wallet.getPublicKey(), 100f, null);
+      genesisTransaction.generateSignature(coinbase.getPrivateKey());	 //manually sign the genesis transaction	
+      genesisTransaction.setTransactionId("0"); //manually set the transaction id
+      genesisTransaction.getOutputs().add(new TransactionOutput(genesisTransaction.getReciepient(), genesisTransaction.getValue(), genesisTransaction.getTransactionId())); //manually add the Transactions Output
+      UTXOs.put(genesisTransaction.getOutputs().get(0).getId(), genesisTransaction.getOutputs().get(0)); //its important to store our first transaction in the UTXOs list.
+      
+      //new block
+      Block genesis = new Block("0");
+      genesis.addTransaction(genesisTransaction);
+      addBlock(genesis);
+
+      System.out.println("balance:" + wallet.getBalance());
+
+      Map<String, Object> walletObj = new HashMap<>();
+      walletObj.put("publicKey", wallet.getPublicKey().toString());
+      walletObj.put("privateKey", wallet.getPrivateKey().toString());
+      walletObj.put("UTXOs", wallet.getUTXOs().toString());
+      ApiFuture<WriteResult> writeActivity = docRef.update("wallet", walletObj);
+      return writeActivity.get().getUpdateTime().toString();
+    }
+    return null;
+  }
 
   public String buyCRUD(String uid, double value) throws InterruptedException, ExecutionException, JSONException {
     Firestore db = FirestoreClient.getFirestore();

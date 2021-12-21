@@ -182,7 +182,6 @@ function Dashboard() {
 
   console.log(coins);
 
-  let userStorage = JSON.parse(localStorage.getItem("users"));
   let {
     user: { displayName, uid, photoURL },
   } = useContext(AuthContext);
@@ -280,7 +279,6 @@ function Dashboard() {
                   <Asset
                     key={index}
                     code={user.code}
-                    logoURL={user.logoURL}
                     quantity={user.quantity}
                   />
                 );

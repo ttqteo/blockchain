@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import listToken from "../firebase/tokenList";
+import { listTokenoriginal } from "../firebase/tokenList";
 
 const Row = styled.div`
   width: 100%;
@@ -36,10 +36,13 @@ const Row = styled.div`
     }
 `;
 
-export default function Asset({ logoURL, quantity, code }) {
+export default function Asset({ quantity, code }) {
   return (
     <Row>
-      <img src={logoURL} className="img" alt="logo" />
+      {listTokenoriginal.map(
+        (item) =>
+          item.name === code && <img src={item.logo} className="img" alt="" />
+      )}
       <div className="text">
         <span className="token">
           {" "}

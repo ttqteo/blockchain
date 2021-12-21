@@ -6,6 +6,7 @@ import { AuthContext } from "../Context/AuthProvider";
 import { AssetContext } from "../Context/AssetProvider";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
+import axios from "axios";
 
 const Wrapper = styled.div`
   max-width: 874px;
@@ -113,36 +114,10 @@ export default function Buy() {
     const value = parseInt(document.getElementById("money").innerText);
     userStorage.map((user) => {
       if (user.uid === uid) {
-        //xử lí mua
-        let assetBuy = [];
-        list.map((item) => {
-          if (item.code !== "USD") {
-            return assetBuy.push(item);
-          } else {
-            assetBuy = [
-              ...assetBuy,
-              {
-                code: item.code,
-                quantity: item.quantity + value,
-                logoURL: item.logoURL,
-              },
-            ];
-          }
-        });
-        // Lưu lại lên firebase
-        setDoc(doc(db, "users", uid), {
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          uid: user.uid,
-          asset: assetBuy,
-          createdAt: user.createdAt,
-          activity: user.activity,
-        });
+        axios.post(`http://localhost:8080/buy?uid=` + uid + `&value=` + value);
       }
     });
     alert("Bạn đã mua " + value + " USD");
-    window.location.reload();
     navigate("/");
     setCash(0);
   };

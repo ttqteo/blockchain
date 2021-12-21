@@ -12,6 +12,7 @@ import {
   getAdditionalUserInfo,
   GoogleAuthProvider,
 } from "firebase/auth";
+import axios from "axios";
 
 const LoginWrapper = styled.div`
   max-width: 940px;
@@ -55,6 +56,7 @@ export default function Login() {
         const user = result.user;
         const data = getAdditionalUserInfo(result);
         if (data?.isNewUser) {
+          axios.post(`http://localhost:8080/signup?uid=` + user.uid);
           setDoc(doc(db, "users", user.uid), {
             uid: user.uid,
             displayName: user.displayName,
@@ -63,47 +65,30 @@ export default function Login() {
             asset: [
               {
                 code: "ETH",
-                quantity: 150,
-                logoURL:
-                  "https://s2.coinmarketcap.com/static/img/coins/200x200/1027.png",
+                quantity: 100,
               },
               {
                 code: "BNB",
-                quantity: 17.5,
-                logoURL:
-                  "https://public.bnbstatic.com/20190405/eb2349c3-b2f8-4a93-a286-8f86a62ea9d8.png",
+                quantity: 10,
               },
               {
                 code: "BTC",
-                quantity: 143,
-                logoURL:
-                  "https://th.bing.com/th/id/OIP.gYEEYXuJLYw03cV0_ANzcwHaHa?pid=ImgDet&rs=1",
+                quantity: 20,
               },
               {
                 code: "ADA",
                 quantity: 27,
-                logoURL:
-                  "https://th.bing.com/th/id/OIP.bv3opyCP290QI6iGEjZsiQAAAA?pid=ImgDet&rs=1",
               },
               {
                 code: "SOL",
                 quantity: 68,
-                logoURL:
-                  "https://solana.com/branding/new/exchange/exchange-sq-black.png",
               },
               {
                 code: "USD",
-                quantity: 1000,
-                logoURL:
-                  "https://images.pngnice.com/download/2007/USD-PNG-Transparent.png",
+                quantity: 150,
               },
             ],
-            activity: {
-              buy: {
-                quantity: 0,
-                createdAt: serverTimestamp(),
-              },
-            },
+            activity: [],
             createdAt: serverTimestamp(),
           });
         }
@@ -117,7 +102,6 @@ export default function Login() {
     <LoginWrapper>
       <img src={logo} className="img" alt="logo" />
       <span className="text">Chào mừng bạn trở lại !</span>
-      {/* <Link to="/"> */}
       <Button
         className="button"
         type="ghost"
@@ -127,7 +111,6 @@ export default function Login() {
         <img src={googleLogo} className="logo" alt="google" />
         Đăng nhập bằng Google
       </Button>
-      {/* </Link> */}
     </LoginWrapper>
   );
 }

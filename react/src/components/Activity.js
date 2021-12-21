@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import listToken from "../firebase/tokenList";
+import { listToken } from "../firebase/tokenList";
 import { AuthContext } from "../Context/AuthProvider";
-import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
+import { doc, setDoc, onSnapshot } from "firebase/firestore";
 
 const Row = styled.div`
   width: 100%;

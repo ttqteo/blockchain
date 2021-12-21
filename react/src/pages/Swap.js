@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { AutoComplete, Button, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import listToken from "../firebase/tokenList";
+import { listToken } from "../firebase/tokenList";
 import { doc, setDoc, set } from "firebase/firestore";
 import { db } from "../firebase/config";
 const { Option } = Select;
@@ -104,6 +104,7 @@ export default function Swap() {
   };
   const handleSwap = () => {
     alert("Chuyển đổi thành công !");
+
     window.location.reload();
     navigate("/");
   };

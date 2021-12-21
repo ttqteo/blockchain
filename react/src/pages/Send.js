@@ -6,7 +6,8 @@ import { AuthContext } from "../Context/AuthProvider";
 import { AssetContext } from "../Context/AssetProvider";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
-import listToken from "../firebase/tokenList";
+import { listToken } from "../firebase/tokenList";
+import axios from "axios";
 
 const { Option } = Select;
 
@@ -93,79 +94,27 @@ function Send() {
   let {
     user: { uid },
   } = useContext(AuthContext);
-  let {
-    assetList: { list },
-  } = useContext(AssetContext);
+
   let userStorage = JSON.parse(localStorage.getItem("users"));
   const coinCodeData = ["ETH", "BNB", "BTC", "ADA", "SOL", "USD"];
   const [selectedCoin, setSelectedCoin] = useState(coinCodeData[0]);
-  const [receiver, setReceiver] = useState("");
-  const [quantity, setQuantity] = useState(0);
   const handleTransaction = () => {
-    alert("Gửi thành công !");
     userStorage.map((user) => {
+      const receiver = parseInt(document.getElementById("receiver").value);
+      const value = parseInt(document.getElementById("token").value);
       if (user.uid === receiver) {
-        // xử lí asset mới của ng nhận
-        let userReceiver = user.asset;
-        let assetReceiver = [];
-        userReceiver.map((item) => {
-          if (item.code !== selectedCoin) {
-            return assetReceiver.push(item);
-          } else {
-            console.log(item.quantity);
-            assetReceiver = [
-              ...assetReceiver,
-              {
-                code: item.code,
-                quantity: item.quantity + parseInt(quantity),
-                logoURL: item.logoURL,
-              },
-            ];
-          }
-        });
-        // Lưu dữ liệu người nhận lên firebase
-        setDoc(doc(db, "users", user.uid), {
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          uid: user.uid,
-          asset: assetReceiver,
-          createdAt: user.createdAt,
-          activity: user.activity,
-        });
-      }
-      if (user.uid === uid) {
-        // xử lí asset mới của ng gửi
-        let assetSender = [];
-        user.asset.map((item) => {
-          if (item.code !== selectedCoin) {
-            return assetSender.push(item);
-          } else {
-            console.log(item.quantity);
-            assetSender = [
-              ...assetSender,
-              {
-                code: item.code,
-                quantity: item.quantity - parseInt(quantity),
-                logoURL: item.logoURL,
-              },
-            ];
-          }
-        });
-        setDoc(doc(db, "users", user.uid), {
-          displayName: user.displayName,
-          email: user.email,
-          photoURL: user.photoURL,
-          uid: user.uid,
-          asset: assetSender,
-          createdAt: user.createdAt,
-          activity: user.activity,
-        });
+        axios.post(
+          `http://localhost:8080/send?uid1=` +
+            uid +
+            `&uid2=` +
+            receiver +
+            `&token=` +
+            selectedCoin +
+            `&value=` +
+            value
+        );
       }
     });
-    setQuantity(0);
-    setReceiver("");
-    window.location.reload();
     navigate("/");
   };
 
@@ -181,8 +130,7 @@ function Send() {
         <Input
           className="inputWallet"
           placeholder="Nhập ví cần gửi"
-          value={receiver}
-          onChange={(e) => setReceiver(e.target.value)}
+          id="receiver"
           allowClear
           size="large"
         />
@@ -259,6 +207,7 @@ function Send() {
             style={{ width: "65%" }}
             placeholder="Số lượng Token"
             options={[{ value: "10" }, { value: "100" }]}
+            id="token"
           />
         </Input.Group>
         <Button
