@@ -1,4 +1,4 @@
-package com.firebase;
+package com.blockchain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +9,14 @@ public class CRUD {
   private String uid;
   private String displayName;
   private String email;
+  private Object asset;
+  
+  public Object getAsset() {
+    return asset;
+  }
+  public void setAsset(Object asset) {
+    this.asset = asset;
+  }
   public String getUid() {
     return uid;
   }

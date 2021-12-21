@@ -19,47 +19,6 @@ public class blockchain {
 	public static Wallet walletC;
 
 	public static Transaction genesisTransaction;
-	
-	/*public static void main(String[] args) {
-		// add our blocks to the blockchain ArrayList:
-		blockchain.add(new Block("Hi im the first block", "0"));
-		System.out.println("Trying to Mine block "+ blockchain.size());
-		blockchain.get(blockchain.size() - 1).mineBlock(difficulty);
-		
-		blockchain.add(new Block("Yo im the second block", blockchain.get(blockchain.size() - 1).hash));
-		System.out.println("Trying to Mine block "+ blockchain.size());
-		blockchain.get(blockchain.size() -1).mineBlock(difficulty);
-		
-		blockchain.add(new Block("Hey im the third block", blockchain.get(blockchain.size() - 1 ).hash));
-		System.out.println("Trying to Mine block "+ blockchain.size());
-		blockchain.get(blockchain.size() -1).mineBlock(difficulty);
-		
-		System.out.println("\nBlockchain is Valid: " + isChainValid());
-
-		String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
-		System.out.println("\nThe block chain: ");
-		System.out.println(blockchainJson);
-		
-		
-		// Setup Bouncey castle as a Security Provider
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-		// Create the new wallets
-		walletA = new Wallet();
-		walletB = new Wallet();
-		// Test public and private keys
-		System.out.println("Private and public keys:");
-		System.out.println(StringUtil.getStringFromKey(walletA.privateKey));
-		System.out.println(StringUtil.getStringFromKey(walletA.publicKey));
-		System.out.println(StringUtil.getStringFromKey(walletB.privateKey));
-		System.out.println(StringUtil.getStringFromKey(walletB.publicKey));
-		// Create a test transaction from WalletA to walletB
-		Transaction transaction = new Transaction(walletA.publicKey, walletB.publicKey, 5);
-		transaction.generateSignature(walletA.privateKey);
-		System.out.println(transaction.signature);
-		// Verify the signature works and verify it from the public key
-		System.out.println("Is signature verified");
-		System.out.println(transaction.verifiySignature());
-	}*/
 
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException{	
 
