@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { AutoComplete, Button, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { listToken } from "../firebase/tokenList";
-import { doc, setDoc, set } from "firebase/firestore";
-import { db } from "../firebase/config";
 const { Option } = Select;
 
 const Wrapper = styled.div`
@@ -94,20 +92,9 @@ const FunctionWrapper = styled.div`
 export default function Swap() {
   let navigate = useNavigate();
   const addDoc = () => {
-    setDoc(doc(db, "blockchain", "12345466"), {
-      name: {
-        ho: "vo van",
-        ten: "quang",
-      },
-      age: 22,
-    });
+    navigate("/")
   };
-  const handleSwap = () => {
-    alert("Chuyển đổi thành công !");
-
-    window.location.reload();
-    navigate("/");
-  };
+  
   return (
     <Wrapper>
       <HeadingWrapper>

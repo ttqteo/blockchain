@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { listToken } from "../firebase/tokenList";
-import { AuthContext } from "../Context/AuthProvider";
-import { db } from "../firebase/config";
-import { doc, setDoc, onSnapshot } from "firebase/firestore";
+
 
 const Row = styled.div`
   width: 100%;
@@ -29,9 +27,14 @@ const Row = styled.div`
     width: 100%;
   }
   .text .message {
+    max-width:500px;
     font-size: 28px;
     line-height: 32px;
     font-weight: bold;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
   }
   .date {
     font-size: 18px;
@@ -66,26 +69,26 @@ export default function Activity({
   wallet,
   token1,
   token2,
-  value,
+  value1,
+  value2,
   date,
 }) {
-  let userStorage = JSON.parse(localStorage.getItem("users"));
   return (
     <Row>
       {type === "buy" ? (
-        <img src={listToken[3].logo} className="img" alt="logo" />
+        <img src={listToken[0].logo} className="img" alt="logo" />
       ) : type === "swap" ? (
         listToken.map(
-          (item) =>
+          (item, index) =>
             item.name === token2 && (
-              <img src={item.logo} className="img" alt="logo" />
+              <img src={item.logo} key={index} className="img" alt="logo" />
             )
         )
       ) : (
         listToken.map(
-          (item) =>
+          (item, index) =>
             item.name === token1 && (
-              <img src={item.logo} className="img" alt="logo" />
+              <img src={item.logo} key={index} className="img" alt="logo" />
             )
         )
       )}
@@ -93,7 +96,7 @@ export default function Activity({
         <span className="message">
           Bạn đã{" "}
           {type === "buy"
-            ? `mua USD`
+            ? `mua ETH`
             : type === "swap"
             ? `đổi ${token1} sang ${token2}`
             : type === "send"
@@ -102,15 +105,15 @@ export default function Activity({
             ? `nhận từ ví ${wallet}`
             : ""}
         </span>
-        <span className="value">
+        <span className="value1">
           {type === "buy"
-            ? `$${value} USD`
+            ? `$${value1} ETH`
             : type === "swap"
-            ? `${value} ${token1} = 300 ${token2}`
+            ? `${value1} ${token1} = ${value2} ${token2}`
             : type === "send"
-            ? `${value} ${token1}`
+            ? `${value1} ${token1}`
             : type === "receive"
-            ? `${value} ${token1}`
+            ? `${value1} ${token1}`
             : ""}
         </span>
       </div>

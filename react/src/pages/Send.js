@@ -3,9 +3,6 @@ import styled from "styled-components";
 import { AutoComplete, Button, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
-import { AssetContext } from "../Context/AssetProvider";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase/config";
 import { listToken } from "../firebase/tokenList";
 import axios from "axios";
 

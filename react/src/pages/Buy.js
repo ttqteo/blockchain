@@ -3,9 +3,6 @@ import styled from "styled-components";
 import { Button } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
-import { AssetContext } from "../Context/AssetProvider";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase/config";
 import axios from "axios";
 
 const Wrapper = styled.div`
@@ -106,10 +103,6 @@ export default function Buy() {
     user: { uid },
   } = useContext(AuthContext);
 
-  let {
-    assetList: { list },
-  } = useContext(AssetContext);
-
   const handleBuy = () => {
     const value = parseInt(document.getElementById("money").innerText);
     userStorage.map((user) => {
@@ -119,6 +112,7 @@ export default function Buy() {
     });
     alert("Bạn đã mua " + value + " USD");
     navigate("/");
+    window.location.reload(true);
     setCash(0);
   };
 
@@ -131,7 +125,7 @@ export default function Buy() {
         </Link>
       </HeadingWrapper>
       <FunctionWrapper>
-        <span className="heading">Lưu ý chỉ mua được USD</span>
+        <span className="heading">Lưu ý chỉ mua được ETH</span>
         <div className="usdController">
           <Button
             size="large"
