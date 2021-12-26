@@ -425,8 +425,8 @@ public class CRUDService {
 
       //handle buy to asset
       JSONArray jsonArr = new JSONArray(string);
-      String valueOld = jsonArr.getJSONObject(5).getString("quantity");
-      jsonArr.getJSONObject(5).put("quantity", Float.parseFloat(valueOld) + value);
+      String valueOld = jsonArr.getJSONObject(0).getString("quantity");
+      jsonArr.getJSONObject(0).put("quantity", Float.parseFloat(valueOld) + value);
       ArrayList<Object> array = new ArrayList<>();
       for(int i = 0; i < jsonArr.length(); i++) 
         Collections.addAll(array, jsonArr.getJSONObject(i).toMap());
@@ -524,7 +524,7 @@ public class CRUDService {
         ApiFuture<WriteResult> writeAsset2 = docRef2.update("asset", array2);
   
         //write activity
-        ApiFuture<WriteResult> writeActivity2 = docRef2.update("activity", FieldValue.arrayUnion(activity("receivce", uid1, token, "", value, 0)));
+        ApiFuture<WriteResult> writeActivity2 = docRef2.update("activity", FieldValue.arrayUnion(activity("receive", uid1, token, "", value, 0)));
         isChainValid();
         return writeActivity1.get().getUpdateTime().toString();
       }

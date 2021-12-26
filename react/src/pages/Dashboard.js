@@ -1,4 +1,4 @@
-import React, { useContext} from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import Asset from "../components/Asset.js";
@@ -7,8 +7,8 @@ import Activity from "../components/Activity.js";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import { AssetContext } from "../Context/AssetProvider";
-import { Date } from 'prismic-reactjs';
-import { format } from 'date-fns-tz';
+import { Date } from "prismic-reactjs";
+import { format } from "date-fns-tz";
 
 const Wrapper = styled.div`
   max-width: 874px;
@@ -166,13 +166,13 @@ const AAWrapper = styled.div`
 
 function Dashboard() {
   let {
-    user: { displayName, uid},
+    user: { displayName, uid },
   } = useContext(AuthContext);
 
   let {
-    asset: { list,acti },
+    asset: { list, acti },
   } = useContext(AssetContext);
-  console.log(Date(acti[0].time.seconds))
+  // console.log(Date(acti[0].time.seconds))
 
   const handleClickHeading = (e) => {
     document
@@ -218,9 +218,7 @@ function Dashboard() {
             {list.length !==0 ? list[0].quantity * exchangeRateUTHToUsd : 0} USD
           </span>
         </div> */}
-        <CoinMain
-          quantity={list[0].quantity}
-        />
+        <CoinMain quantity={list[0].quantity} />
         <div className="function">
           <Link to="/buy" className="item">
             <Button
@@ -259,7 +257,7 @@ function Dashboard() {
           <div className="title active">Tài sản</div>
           <div className="title ">Hoạt động</div>
         </div>
-        <div className="assets__wrapper">          
+        <div className="assets__wrapper">
           {uid
             ? list.map((user, index) => {
                 return (
@@ -274,20 +272,25 @@ function Dashboard() {
             : ""}
         </div>
         <div className="activities_wrapper hide">
-        {acti.length !==0 ? acti.map((item,index)=>{
-          return(
-            <Activity
-              key={index}
-              type= {item.type}
-              wallet= {item.wallet}
-              token1= {item.token1}
-              value1= {item.value1}
-              value2= {item.value2}
-              token2= {item.token2}
-              date = {format(Date(item.time.seconds*1000),'MMMM dd, yyyy H:mm b').toString()}
-            />
-          )
-        }):""}
+          {acti.length !== 0
+            ? acti.map((item, index) => {
+                return (
+                  <Activity
+                    key={index}
+                    type={item.type}
+                    wallet={item.wallet}
+                    token1={item.token1}
+                    value1={item.value1}
+                    value2={item.value2}
+                    token2={item.token2}
+                    date={format(
+                      Date(item.time.seconds * 1000),
+                      "MMMM dd, yyyy H:mm b"
+                    ).toString()}
+                  />
+                );
+              })
+            : ""}
         </div>
       </AAWrapper>
     </Wrapper>

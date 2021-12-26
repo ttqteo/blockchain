@@ -69,28 +69,30 @@ export default function Login() {
               },
               {
                 code: "BNB",
-                quantity: 10,
+                quantity: 0,
               },
               {
                 code: "BTC",
-                quantity: 20,
+                quantity: 0,
               },
               {
                 code: "ADA",
-                quantity: 27,
+                quantity: 0,
               },
               {
                 code: "SOL",
-                quantity: 68,
+                quantity: 0,
               },
               {
                 code: "USD",
-                quantity: 150,
+                quantity: 0,
               },
             ],
             activity: [],
             createdAt: serverTimestamp(),
           });
+        } else {
+          axios.get(`http://localhost:8080/signin`);
         }
       })
       .catch((error) => {

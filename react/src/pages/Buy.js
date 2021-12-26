@@ -97,7 +97,6 @@ const FunctionWrapper = styled.div`
 
 export default function Buy() {
   let navigate = useNavigate();
-  let userStorage = JSON.parse(localStorage.getItem("users"));
   const [cash, setCash] = useState(0);
   let {
     user: { uid },
@@ -105,14 +104,9 @@ export default function Buy() {
 
   const handleBuy = () => {
     const value = parseInt(document.getElementById("money").innerText);
-    userStorage.map((user) => {
-      if (user.uid === uid) {
-        axios.post(`http://localhost:8080/buy?uid=` + uid + `&value=` + value);
-      }
-    });
-    alert("Bạn đã mua " + value + " USD");
+    axios.post(`http://localhost:8080/buy?uid=` + uid + `&value=` + value);
+    alert("Bạn đã mua " + value + " ETH");
     navigate("/");
-    window.location.reload(true);
     setCash(0);
   };
 

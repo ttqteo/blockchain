@@ -92,26 +92,31 @@ function Send() {
     user: { uid },
   } = useContext(AuthContext);
 
-  let userStorage = JSON.parse(localStorage.getItem("users"));
   const coinCodeData = ["ETH", "BNB", "BTC", "ADA", "SOL", "USD"];
   const [selectedCoin, setSelectedCoin] = useState(coinCodeData[0]);
   const handleTransaction = () => {
-    userStorage.map((user) => {
-      const receiver = parseInt(document.getElementById("receiver").value);
-      const value = parseInt(document.getElementById("token").value);
-      if (user.uid === receiver) {
-        axios.post(
-          `http://localhost:8080/send?uid1=` +
-            uid +
-            `&uid2=` +
-            receiver +
-            `&token=` +
-            selectedCoin +
-            `&value=` +
-            value
-        );
-      }
-    });
+    const receiver = document.getElementById("receiver").value;
+    const value = parseInt(document.getElementById("token").value);
+    console.log(receiver);
+    console.log(uid);
+    axios.post(
+      `http://localhost:8080/send?uid1=` +
+        uid +
+        `&uid2=` +
+        receiver +
+        `&token=` +
+        selectedCoin +
+        `&value=` +
+        value
+    );
+    alert(
+      "Bạn đã chuyển thành công " +
+        value +
+        " " +
+        selectedCoin +
+        " đến ví " +
+        receiver
+    );
     navigate("/");
   };
 

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { AutoComplete, Button, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { listToken } from "../firebase/tokenList";
+import axios from "axios";
+import { AuthContext } from "../Context/AuthProvider";
 const { Option } = Select;
 
 const Wrapper = styled.div`
@@ -91,10 +93,37 @@ const FunctionWrapper = styled.div`
 
 export default function Swap() {
   let navigate = useNavigate();
-  const addDoc = () => {
-    navigate("/")
+  const coinCodeData = ["ETH", "BNB", "BTC", "ADA", "SOL", "USD"];
+  const [selectedCoin1, setSelectedCoin1] = useState(coinCodeData[0]);
+  const [selectedCoin2, setSelectedCoin2] = useState(coinCodeData[0]);
+
+  let {
+    user: { uid },
+  } = useContext(AuthContext);
+
+  const handleSwap = () => {
+    const value = parseInt(document.getElementById("value").value);
+    axios.post(
+      `http://localhost:8080/swap?uid=` +
+        uid +
+        `&token1=` +
+        selectedCoin1 +
+        `&value=` +
+        value +
+        `&token2=` +
+        selectedCoin2
+    );
+    alert(
+      "Bạn đã đổi thành công " +
+        value +
+        " " +
+        selectedCoin1 +
+        " sang " +
+        selectedCoin2
+    );
+    navigate("/");
   };
-  
+
   return (
     <Wrapper>
       <HeadingWrapper>
@@ -106,7 +135,13 @@ export default function Swap() {
       <FunctionWrapper>
         <span className="heading">Chuyển từ</span>
         <Input.Group size="large" compact className="inputToken">
-          <Select style={{ width: "35%" }} defaultValue="ETH">
+          <Select
+            style={{ width: "35%" }}
+            defaultValue="ETH"
+            onChange={(e) => {
+              setSelectedCoin1(e);
+            }}
+          >
             <Option value="ETH">
               <img
                 src={listToken[0].logo}
@@ -172,12 +207,19 @@ export default function Swap() {
             style={{ width: "65%" }}
             placeholder="Số lượng Token"
             options={[{ value: "10" }, { value: "100" }]}
+            id="value"
           />
         </Input.Group>
         <div className="description">Có 2.4545 ETH khả dụng</div>
         <span className="heading">Thành</span>
         <Input.Group size="large" compact className="inputToken">
-          <Select style={{ width: "35%" }} defaultValue="ETH">
+          <Select
+            style={{ width: "35%" }}
+            defaultValue="ETH"
+            onChange={(e) => {
+              setSelectedCoin2(e);
+            }}
+          >
             <Option value="ETH">
               <img
                 src={listToken[0].logo}
@@ -250,7 +292,7 @@ export default function Swap() {
           type="primary"
           shape="round"
           className="end-button"
-          onClick={addDoc}
+          onClick={handleSwap}
         >
           Chuyển
         </Button>

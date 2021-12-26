@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { listToken } from "../firebase/tokenList";
-
+import { listTokenoriginal } from "../firebase/tokenList";
 
 const Row = styled.div`
   width: 100%;
@@ -76,16 +75,16 @@ export default function Activity({
   return (
     <Row>
       {type === "buy" ? (
-        <img src={listToken[0].logo} className="img" alt="logo" />
+        <img src={listTokenoriginal[0].logo} className="img" alt="logo" />
       ) : type === "swap" ? (
-        listToken.map(
+        listTokenoriginal.map(
           (item, index) =>
             item.name === token2 && (
               <img src={item.logo} key={index} className="img" alt="logo" />
             )
         )
       ) : (
-        listToken.map(
+        listTokenoriginal.map(
           (item, index) =>
             item.name === token1 && (
               <img src={item.logo} key={index} className="img" alt="logo" />
