@@ -1,16 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext} from "react";
 import styled from "styled-components";
 import { Button } from "antd";
-import eth from "../assets/token/eth_original.png";
 import Asset from "../components/Asset.js";
+import CoinMain from "../components/CoinMain.js";
 import Activity from "../components/Activity.js";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import { AssetContext } from "../Context/AssetProvider";
-import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../firebase/config";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Date } from 'prismic-reactjs';
+import { format } from 'date-fns-tz';
+
 const Wrapper = styled.div`
   max-width: 874px;
   height: 100%;
@@ -166,29 +165,14 @@ const AAWrapper = styled.div`
 `;
 
 function Dashboard() {
-  const [coins, setCoins] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false"
-      )
-      .then((res) => {
-        setCoins(res.data);
-        console.log(res.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  console.log(coins);
-
   let {
-    user: { displayName, uid, photoURL },
+    user: { displayName, uid},
   } = useContext(AuthContext);
+
   let {
-    assetList: { list },
+    asset: { list,acti },
   } = useContext(AssetContext);
-  const exchangeRateUTHToUsd = 4158;
+  console.log(Date(acti[0].time.seconds))
 
   const handleClickHeading = (e) => {
     document
@@ -227,13 +211,16 @@ function Dashboard() {
         </div>
       </PublicKey>
       <FunctionWrapper>
-        <div className="summary">
+        {/* <div className="summary">
           <img className="img" src={eth} alt="" />
-          <span className="eth">{uid ? list[0].quantity : ""} ETH</span>
+          <span className="eth">{list.length !==0 ? list[0].quantity : ""} ETH</span>
           <span className="usd">
-            {uid ? list[0].quantity * exchangeRateUTHToUsd : 0} USD
+            {list.length !==0 ? list[0].quantity * exchangeRateUTHToUsd : 0} USD
           </span>
-        </div>
+        </div> */}
+        <CoinMain
+          quantity={list[0].quantity}
+        />
         <div className="function">
           <Link to="/buy" className="item">
             <Button
@@ -272,7 +259,7 @@ function Dashboard() {
           <div className="title active">Tài sản</div>
           <div className="title ">Hoạt động</div>
         </div>
-        <div className="assets__wrapper">
+        <div className="assets__wrapper">          
           {uid
             ? list.map((user, index) => {
                 return (
@@ -280,20 +267,27 @@ function Dashboard() {
                     key={index}
                     code={user.code}
                     quantity={user.quantity}
+                    changeCode={user.code.toLowerCase()}
                   />
                 );
               })
             : ""}
         </div>
         <div className="activities_wrapper hide">
-          <Activity
-            type="buy"
-            wallet=""
-            token1=""
-            value="100"
-            token2=""
-            date="12:15PM Nov 10th, 2021"
-          />
+        {acti.length !==0 ? acti.map((item,index)=>{
+          return(
+            <Activity
+              key={index}
+              type= {item.type}
+              wallet= {item.wallet}
+              token1= {item.token1}
+              value1= {item.value1}
+              value2= {item.value2}
+              token2= {item.token2}
+              date = {format(Date(item.time.seconds*1000),'MMMM dd, yyyy H:mm b').toString()}
+            />
+          )
+        }):""}
         </div>
       </AAWrapper>
     </Wrapper>

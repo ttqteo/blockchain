@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useRef, memo } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/config";
 import { Spin } from "antd";
 import { db } from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
-// import { addDocument } from "../firebase/services";
 
 export const AuthContext = React.createContext();
 
@@ -12,8 +11,6 @@ function AuthProvider({ children }) {
   const [user, setUser] = useState({});
   let navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-
-  const assetUser = useRef(0);
 
   async function readData(uid) {
     let arrs = [];
