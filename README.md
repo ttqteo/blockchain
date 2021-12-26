@@ -5,31 +5,43 @@ Link deployed website: https://zen-lovelace-a38391.netlify.app/
 1. Only sign-in with Google Account (using Firebase Authentication)
 2. Database in Firebase Cloud
 3. ReactJS with library React-router-dom, Firebase, Components by Ant.Desgin
-4. Create blockchain: coming soon
-5. Transaction: coming soon
-6. Buy USD, Send Token, Swap Token: coming soon
+4. Create blockchain
+5. Transaction
+6. Buy USD, Send Token, Swap Token
 
-## Front-End - localhost:3000
+# Hướng dẫn dùng thử Project Blockchain Beta (tiếng Việt)
+Project có tổng 2 thư mục, Back-End với ngôn ngữ Java (Spring Boot), Front-End với ngôn ngữ ReactJS \
+Yêu cầu: Chạy riêng 2 thư mục vì localhost sẽ khác nhau
+
+## Spring Boot Java (Back-End) - localhost:8080
+
+Yêu cầu chạy Back-end trước để đảm bảo server hoạt động ổn định
+Cần có:
+1. `serviceAccountKey` của Firebase API đồ án (dưới dạng json) và di chuyển đến thư mục `blockchain/java/src/main/resources/`
+2. Cần có Spring Boot, Java, Maven để chạy được Project
+
+### Dịch vụ (đồng ETH)
+#### Bước 1: 
+* `/signup&uid=xxx` -> tạo tài khoản mới 
+* `/signin`-> đăng nhập tài khoản đã có 
+#### Bước 2: (thực hiện chức năng mua-chuyển-đổi) 
+* `/buy?uid=xxxx&value=yyy` 
+* `/send?uid1=xxx&uid2=yyy&token=token&value=value` 
+* `/swap?uid=xxx&token1=token1&value=value&token2=token2` 
+
+## React (Front-End) localhost:3000
 
 ### `npm install`
 
-Installs npm in your computer to run app
+Gõ cmd `npm install` để cài đặt package npm trong máy của bạn
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Gõ cmd `npm start` để chạy ReactJS
+Mở [http://localhost:3000](http://localhost:3000) để xem giao diện trên trình duyệt.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-## Back-End - localhost:8080
-
-1. Goes to Firebase to get specific key (download it and rename `serviceAccountKey.json`) 
-2. Moves to folder `blockchain/java/src/main/resources/`
-3. Start Spring Boot Project (via CRUDRunner)
-
-## REST API from React to Firebase via Spring Boot Java
+Giao diện UI chạy lần đầu sẽ gặp một vài lỗi không ý muốn. Lỗi này sẽ fix sau.
+Nếu muốn truy cập được... inbox.
 
 ## Copyright
 (C) 2021. Belongs to group 16, Java developing - FETEL HCMUS.\
