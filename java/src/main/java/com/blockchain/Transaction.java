@@ -12,13 +12,17 @@ public class Transaction {
 	private byte[] signature; // this is to prevent anybody else from spending
 							// funds in our wallet.
 
-    private ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
+  private ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
 	private ArrayList<TransactionOutput> outputs = new ArrayList<TransactionOutput>();
 
 	private static int sequence = 0; // a rough count of how many transactions
 										// have been generated.
 
 	// Constructor:
+	public Transaction() {
+
+	}
+
 	public Transaction(PublicKey from, PublicKey to, float value, ArrayList<TransactionInput> inputs) {
 		this.sender = from;
 		this.reciepient = to;
@@ -117,13 +121,16 @@ public class Transaction {
 				return false;
 			}
 
+			if (inputs == null) 
+				return true;
+
 			// gather transaction inputs (Make sure they are unspent):
 			for (TransactionInput i : inputs) {
-				i.setUTXO(blockchain.UTXOs.get(i.getTransactionOutputId()));
+				i.setUTXO(CRUDService.UTXOs.get(i.getTransactionOutputId()));
 			}
 
 			// check if transaction is valid:
-			if (getInputsValue() < blockchain.minimumTransaction) {
+			if (getInputsValue() < CRUDService.minimumTransaction) {
 				System.out.println("#Transaction Inputs to small: " + getInputsValue());
 				return false;
 			}
@@ -136,14 +143,14 @@ public class Transaction {
 
 			// add outputs to Unspent list
 			for (TransactionOutput o : outputs) {
-				blockchain.UTXOs.put(o.getId(), o);
+				CRUDService.UTXOs.put(o.getId(), o);
 			}
 
 			// remove transaction inputs from UTXO lists as spent:
 			for (TransactionInput i : inputs) {
 				if (i.getUTXO() == null)
 					continue; // if Transaction can't be found skip it
-				blockchain.UTXOs.remove(i.getUTXO().getId());
+				CRUDService.UTXOs.remove(i.getUTXO().getId());
 			}
 
 			return true;

@@ -10,7 +10,14 @@ public class CRUD {
   private String displayName;
   private String email;
   private Object asset;
+  private Object wallet;
   
+  public Object getWallet() {
+    return wallet;
+  }
+  public void setWallet(Object wallet) {
+    this.wallet = wallet;
+  }
   public Object getAsset() {
     return asset;
   }

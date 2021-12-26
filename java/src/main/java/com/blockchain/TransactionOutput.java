@@ -9,6 +9,10 @@ public class TransactionOutput {
 	private String parentTransactionId; //the id of the transaction this output was created in
 	
 	//Constructor
+	public TransactionOutput() {
+
+	}
+	
 	public TransactionOutput(PublicKey reciepient, float value, String parentTransactionId) {
 		this.reciepient = reciepient;
 		this.value = value;
@@ -50,7 +54,7 @@ public class TransactionOutput {
 
 	//Check if coin belongs to you
 	public boolean isMine(PublicKey publicKey) {
-		return (publicKey == reciepient);
+		return (publicKey.equals(reciepient));
 	}
 
 }

@@ -21,7 +21,7 @@ import org.json.JSONException;
 
 public class CurrencyConverter{
 	
-	public static double CurrencyConverter(String fromCode, String toCode, double amount) throws IOException, JSONException {
+	public static float CurrencyConverter(String fromCode, String toCode, float amount) throws IOException, JSONException {
 		HashMap<Integer,String> currencyCodes = new HashMap<Integer,String>();
 		
 		//Code currency
@@ -35,7 +35,7 @@ public class CurrencyConverter{
 		return sendHttpGETRequest(fromCode,toCode, amount);
 		
 	}
-	private static double sendHttpGETRequest(String fromCode, String toCode, double amount) throws IOException, JSONException {
+	private static float sendHttpGETRequest(String fromCode, String toCode, float amount) throws IOException, JSONException {
 		DecimalFormat deci = new DecimalFormat("00.0000");
 		//https://api.fastforex.io/convert?from=USD&to=CAD&amount=1&api_key=a542c21ba7-811135465a-r3ovn2
 		//https://api.fastforex.io/fetch-one?from=USD&to=CAD&api_key=a542c21ba7-811135465a-r3ovn2
@@ -58,7 +58,7 @@ public class CurrencyConverter{
 		String exchangeRate = rootobj.get(toCode).getAsString(); 
 		System.out.println(exchangeRate);
 		System.out.println(deci.format(amount) + fromCode + " = " + deci.format(amount*Double.parseDouble(exchangeRate)) +toCode);
-		return amount*Double.parseDouble(exchangeRate);
+		return amount*Float.parseFloat(exchangeRate);
 	    
 	}
 

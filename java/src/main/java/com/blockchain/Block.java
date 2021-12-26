@@ -61,6 +61,10 @@ public class Block {
 		this.nonce = nonce;
 	}
 
+	public Block() {
+		
+	}
+
 	public Block(String previousHash) {
 		this.previousHash = previousHash;
 		this.timeStamp = new Date().getTime();
