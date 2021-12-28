@@ -9,7 +9,6 @@ import { AuthContext } from "../Context/AuthProvider";
 import { AssetContext } from "../Context/AssetProvider";
 import { Date } from 'prismic-reactjs';
 import { format } from 'date-fns-tz';
-
 const Wrapper = styled.div`
   max-width: 874px;
   height: 100%;
@@ -172,7 +171,6 @@ function Dashboard() {
   let {
     asset: { list,acti },
   } = useContext(AssetContext);
-  console.log(Date(acti[0].time.seconds))
 
   const handleClickHeading = (e) => {
     document

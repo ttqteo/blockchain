@@ -5,6 +5,7 @@ import axios from "axios";
 import { collection} from "firebase/firestore";
 import { onSnapshot} from "firebase/firestore";
 import { db } from "../firebase/config";
+import NumberFormat from "react-number-format";
 
 
 const Row = styled.div`
@@ -52,13 +53,11 @@ export default function Asset({ quantity, code, changeCode }) {
     const [coins, setCoins] = useState([]);
     useEffect(() => {
       const newData = onSnapshot(collection(db, 'users'), (snapshot) =>{
-        console.log("Thay đổi ở asset")
         axios
           .get(
             "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false"
           )
           .then((res) => {
-            console.log(res.data,"thay đổi lại asset")
             setCoins(res.data)
           })
           .catch((error) => console.log(error));
@@ -82,8 +81,21 @@ export default function Asset({ quantity, code, changeCode }) {
           $<span id="toUsd">
               {code!=='USD' ? coins.filter((coin)=>{
                   return (coin.symbol === changeCode)
-              }).map((item)=>{
-                return (item.current_price*quantity).toFixed(3)
+              }).map((item,index)=>{
+                return(
+                  <NumberFormat
+                        key={index}
+                        thousandsGroupStyle="thousand"
+                        value={item.current_price*quantity}
+                        prefix=""
+                        decimalSeparator="."
+                        displayType="text"
+                        type="text"
+                        thousandSeparator={true}
+                        allowNegative={true}
+                        decimalScale={3}
+                    />
+                )                 
                 }):quantity}
           </span> USD
         </div>

@@ -93,8 +93,32 @@ function Send() {
   } = useContext(AuthContext);
 
   let userStorage = JSON.parse(localStorage.getItem("users"));
-  const coinCodeData = ["ETH", "BNB", "BTC", "ADA", "SOL", "USD"];
-  const [selectedCoin, setSelectedCoin] = useState(coinCodeData[0]);
+  const [selectedCoin, setSelectedCoin] = useState("ETH");
+  const [quantity, setQuantity] = useState(0);
+  const [isValid,setIsValid] = useState(true);
+  userStorage.map((user)=>{
+    if (user.uid === uid){
+        return user.asset.map((item)=>{
+          if (item.code === selectedCoin){
+            console.log(selectedCoin, " : ", item.quantity)
+            if(quantity > item.quantity){
+              console.log("không thể gửi")
+              if (isValid===true)
+                setIsValid(false)
+            }
+            else
+            {
+              console.log("có thể gửi")
+              if (isValid===false)
+                setIsValid(true)
+            }
+          }
+        })
+    }
+  })
+  
+ 
+
   const handleTransaction = () => {
     userStorage.map((user) => {
       const receiver = parseInt(document.getElementById("receiver").value);
@@ -203,12 +227,28 @@ function Send() {
           <AutoComplete
             style={{ width: "65%" }}
             placeholder="Số lượng Token"
+            onChange={(e)=>{
+              setQuantity(e)
+            }}
             options={[{ value: "10" }, { value: "100" }]}
             id="token"
           />
         </Input.Group>
+        <span style = {{color:"#0074dc"}}>{selectedCoin} khả dụng: {
+          userStorage.map((user)=>{
+            if (user.uid === uid){
+                return user.asset.map((item)=>{
+                  if (item.code === selectedCoin){
+                    return item.quantity
+                  }
+                })
+            }
+          })
+        }
+        </span>
         <Button
           size="large"
+          disabled = {isValid ? false : true}
           type="primary"
           shape="round"
           className="end-button"

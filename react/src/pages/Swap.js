@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useState, useContext} from "react";
 import styled from "styled-components";
 import { AutoComplete, Button, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { listToken } from "../firebase/tokenList";
+import { AuthContext } from "../Context/AuthProvider";
+
 const { Option } = Select;
 
 const Wrapper = styled.div`
@@ -94,7 +96,18 @@ export default function Swap() {
   const addDoc = () => {
     navigate("/")
   };
+  let userStorage = JSON.parse(localStorage.getItem("users"));
   
+  let {
+    user: { uid },
+  } = useContext(AuthContext);
+
+  const [coinFrom,setCoinFrom] = useState("ETH")
+  const [quantityFrom, setQuantityFrom] = useState(0)
+  const [coinTo,setCoinTo] = useState("ETH")
+  // const [quantityTo, setQuantityTo] = useState()
+
+  console.log(coinFrom,quantityFrom)
   return (
     <Wrapper>
       <HeadingWrapper>
@@ -106,7 +119,11 @@ export default function Swap() {
       <FunctionWrapper>
         <span className="heading">Chuyển từ</span>
         <Input.Group size="large" compact className="inputToken">
-          <Select style={{ width: "35%" }} defaultValue="ETH">
+          <Select style={{ width: "35%" }} defaultValue="ETH"
+             onChange={(e) => {
+              setCoinFrom(e);
+            }}
+          >
             <Option value="ETH">
               <img
                 src={listToken[0].logo}
@@ -172,12 +189,27 @@ export default function Swap() {
             style={{ width: "65%" }}
             placeholder="Số lượng Token"
             options={[{ value: "10" }, { value: "100" }]}
+            onChange={(e) => {setQuantityFrom(e)}}
           />
         </Input.Group>
-        <div className="description">Có 2.4545 ETH khả dụng</div>
+        <div className="description">Có {
+          userStorage.map((user)=>{
+            if (user.uid === uid){
+                return user.asset.map((item)=>{
+                  if (item.code === coinFrom){
+                    return item.quantity
+                  }
+                })
+            }
+          })
+        } {coinFrom} khả dụng</div>
         <span className="heading">Thành</span>
         <Input.Group size="large" compact className="inputToken">
-          <Select style={{ width: "35%" }} defaultValue="ETH">
+          <Select style={{ width: "35%" }} defaultValue="ETH"
+            onChange={(e) => {
+              setCoinTo(e);
+            }}
+          >
             <Option value="ETH">
               <img
                 src={listToken[0].logo}
@@ -240,6 +272,7 @@ export default function Swap() {
             </Option>
           </Select>
           <AutoComplete
+            value={quantityFrom}
             style={{ width: "65%" }}
             placeholder="Số lượng Token"
             options={[{ value: "10" }, { value: "100" }]}

@@ -5,6 +5,7 @@ import axios from "axios";
 import { collection} from "firebase/firestore";
 import { onSnapshot} from "firebase/firestore";
 import { db } from "../firebase/config";
+import NumberFormat from "react-number-format";
 
 export default function CoinMain({quantity}){
     const [coins, setCoins] = useState([]);
@@ -26,12 +27,27 @@ export default function CoinMain({quantity}){
             <img className="img" src={eth} alt="" />
             <span className="eth">{quantity} ETH</span>
             <span className="usd">
-            {coins.filter((coin)=>{
+            
+            {coins.length !==0 ? coins.filter((coin)=>{
                     return (coin.symbol === "eth")
-                }).map((item)=>{
-                    console.log(item.current_price,"CoinMain")
-                    return (item.current_price*quantity).toFixed(0)
-                    })} USD
+                }).map((item,index)=>{
+                    return (
+                      <NumberFormat
+                        key={index}
+                        thousandsGroupStyle="thousand"
+                        value={item.current_price*quantity}
+                        prefix=""
+                        decimalSeparator="."
+                        displayType="text"
+                        type="text"
+                        thousandSeparator={true}
+                        allowNegative={true}
+                        suffix=" USD" 
+                        decimalScale={3}
+                    />
+                    )
+                    
+                    }):''}
             </span>
             </div>
     )
