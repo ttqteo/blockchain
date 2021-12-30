@@ -216,9 +216,7 @@ function Dashboard() {
             {list.length !==0 ? list[0].quantity * exchangeRateUTHToUsd : 0} USD
           </span>
         </div> */}
-        <CoinMain
-          quantity={list[0].quantity}
-        />
+        <CoinMain/>
         <div className="function">
           <Link to="/buy" className="item">
             <Button
@@ -272,17 +270,17 @@ function Dashboard() {
             : ""}
         </div>
         <div className="activities_wrapper hide">
-        {acti.length !==0 ? acti.map((item,index)=>{
+        {acti.length !==0 ? acti.map((item,index,array)=>{
           return(
             <Activity
               key={index}
-              type= {item.type}
-              wallet= {item.wallet}
-              token1= {item.token1}
-              value1= {item.value1}
-              value2= {item.value2}
-              token2= {item.token2}
-              date = {format(Date(item.time.seconds*1000),'MMMM dd, yyyy H:mm b').toString()}
+              type= {acti[acti.length-1-index].type}
+              wallet= {acti[acti.length-1-index].wallet}
+              token1= {acti[acti.length-1-index].token1}
+              value1= {acti[acti.length-1-index].value1}
+              value2= {acti[acti.length-1-index].value2}
+              token2= {acti[acti.length-1-index].token2}
+              date = {format(Date(acti[acti.length-1-index].time.seconds*1000),'MMMM dd, yyyy H:mm b').toString()}
             />
           )
         }):""}

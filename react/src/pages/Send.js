@@ -96,6 +96,7 @@ function Send() {
   const [selectedCoin, setSelectedCoin] = useState("ETH");
   const [quantity, setQuantity] = useState(0);
   const [isValid,setIsValid] = useState(true);
+
   userStorage.map((user)=>{
     if (user.uid === uid){
         return user.asset.map((item)=>{
@@ -225,7 +226,7 @@ function Send() {
             </Option>
           </Select>
           <AutoComplete
-            style={{ width: "65%" }}
+            style={{ width: "65%",border: isValid===false ? "1px solid #ff0000":""}}
             placeholder="Số lượng Token"
             onChange={(e)=>{
               setQuantity(e)
@@ -234,7 +235,7 @@ function Send() {
             id="token"
           />
         </Input.Group>
-        <span style = {{color:"#0074dc"}}>{selectedCoin} khả dụng: {
+        <span style = {isValid ? {color:"#0074dc"} : {color:"#ff0000"}}>{selectedCoin} khả dụng: {
           userStorage.map((user)=>{
             if (user.uid === uid){
                 return user.asset.map((item)=>{

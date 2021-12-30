@@ -1,10 +1,13 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { AutoComplete, Button, Input, Select } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { listToken } from "../firebase/tokenList";
 import { AuthContext } from "../Context/AuthProvider";
-
+import axios from "axios";
+import { collection} from "firebase/firestore";
+import { onSnapshot} from "firebase/firestore";
+import { db } from "../firebase/config";
 const { Option } = Select;
 
 const Wrapper = styled.div`
@@ -89,6 +92,11 @@ const FunctionWrapper = styled.div`
       padding-bottom: 4px;
     }
   }
+  .ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector input {
+    cursor: not-allowed;
+    color: #333;
+    font-weight: bold;
+}
 `;
 
 export default function Swap() {
@@ -104,10 +112,59 @@ export default function Swap() {
 
   const [coinFrom,setCoinFrom] = useState("ETH")
   const [quantityFrom, setQuantityFrom] = useState(0)
+  const [changeFrom, setChangeFrom] = useState(0)
   const [coinTo,setCoinTo] = useState("ETH")
-  // const [quantityTo, setQuantityTo] = useState()
+  const [changeTo, setChangeTo] = useState(0)
+  const [isValid,setIsValid] = useState(true);
+  useEffect(() => {
+    const newData = onSnapshot(collection(db, 'users'), (snapshot) =>{
+      axios
+        .get(
+          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false"
+        )
+        .then((res) => {
+          res.data.map((item) => {
+            if (coinFrom.toLowerCase() === item.symbol) {
+              setChangeFrom(item.current_price)
+            }
+            if (coinTo.toLowerCase() === item.symbol) {
+              setChangeTo(item.current_price)
+            }
+          })
 
-  console.log(coinFrom,quantityFrom)
+        })
+        .catch((error) => console.log(error));
+    })
+    return newData
+  }, [coinFrom , coinTo])
+  
+  // quantityTo.map((item)=>{
+  //   if (coinFrom.toLowerCase === item.symbol) {
+  //     console.log(item.current_price)
+  //   }
+
+  // })
+
+  userStorage.map((user)=>{
+    if (user.uid === uid){
+        return user.asset.map((item)=>{
+          if (item.code === coinFrom){
+            if(quantityFrom > item.quantity){
+              if (isValid===true)
+                setIsValid(false)
+            }
+            else
+            {
+              if (isValid===false)
+                setIsValid(true)
+            }
+          }
+        })
+    }
+  })
+  console.log(coinFrom,quantityFrom, changeFrom)
+  console.log(isValid)
+  console.log(coinTo,changeTo)
   return (
     <Wrapper>
       <HeadingWrapper>
@@ -186,7 +243,7 @@ export default function Swap() {
             </Option>
           </Select>
           <AutoComplete
-            style={{ width: "65%" }}
+            style={{ width: "65%",border: isValid===false ? "1px solid #ff0000":""}}
             placeholder="Số lượng Token"
             options={[{ value: "10" }, { value: "100" }]}
             onChange={(e) => {setQuantityFrom(e)}}
@@ -272,13 +329,15 @@ export default function Swap() {
             </Option>
           </Select>
           <AutoComplete
-            value={quantityFrom}
-            style={{ width: "65%" }}
+            disabled
+            value={(quantityFrom * changeFrom / changeTo).toFixed(3)}
+            style={{ width: "65%",color:"red !important" }}
             placeholder="Số lượng Token"
             options={[{ value: "10" }, { value: "100" }]}
           />
         </Input.Group>
         <Button
+          disabled={isValid ? false : true}
           size="large"
           type="primary"
           shape="round"

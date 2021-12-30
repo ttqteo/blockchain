@@ -1,14 +1,20 @@
 
-import React, {useEffect,useState} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import eth from "../assets/token/eth_original.png";
 import axios from "axios";
 import { collection} from "firebase/firestore";
 import { onSnapshot} from "firebase/firestore";
 import { db } from "../firebase/config";
 import NumberFormat from "react-number-format";
-
-export default function CoinMain({quantity}){
+import { AssetContext } from "../Context/AssetProvider";
+export default function CoinMain(){
+  let sumUSD=0;
+  let sumETH=0;
+  let {
+    asset: { list},
+  } = useContext(AssetContext);
     const [coins, setCoins] = useState([]);
+   
     useEffect(() => {
         const newData = onSnapshot(collection(db, 'users'), (snapshot) =>{
           axios
@@ -25,10 +31,17 @@ export default function CoinMain({quantity}){
     return(
             <div className="summary">
             <img className="img" src={eth} alt="" />
-            <span className="eth">{quantity} ETH</span>
+            { list.length !==0 ? list.map((item) =>{
+                    coins.map((coin) =>{
+                      if(coin.symbol === item.code.toLowerCase() && coin.symbol !== 'eth')
+                        sumETH = sumETH + item.quantity*coin.current_price / coins[1].current_price
+                    })
+                    
+              }):''}
+            <span className="eth"> {list ? (sumETH).toFixed(3) : ''} ETH</span>
             <span className="usd">
             
-            {coins.length !==0 ? coins.filter((coin)=>{
+            {/* {coins.length !==0 ? coins.filter((coin)=>{
                     return (coin.symbol === "eth")
                 }).map((item,index)=>{
                     return (
@@ -46,8 +59,30 @@ export default function CoinMain({quantity}){
                         decimalScale={3}
                     />
                     )
-                    
-                    }):''}
+              }):''} */}
+
+              { list.length !==0 ? list.map((item) =>{
+                  coins.map((coin) =>{
+                    if(coin.symbol === item.code.toLowerCase())
+                       sumUSD = sumUSD + item.quantity*coin.current_price;
+                  })
+                  
+              }):''}
+              
+                      <NumberFormat
+                        thousandsGroupStyle="thousand"
+                        value={list.leng !== 0 ? sumUSD  : ''}
+                        prefix=""
+                        decimalSeparator="."
+                        displayType="text"
+                        type="text"
+                        thousandSeparator={true}
+                        allowNegative={true}
+                        suffix=" USD" 
+                        decimalScale={3}
+                    />
+                  
+
             </span>
             </div>
     )

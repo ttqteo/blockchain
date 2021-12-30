@@ -110,7 +110,7 @@ export default function Buy() {
         axios.post(`http://localhost:8080/buy?uid=` + uid + `&value=` + value);
       }
     });
-    alert("Bạn đã mua " + value + " USD");
+    alert("Bạn đã mua " + value + " ETH ");
     navigate("/");
     window.location.reload(true);
     setCash(0);
