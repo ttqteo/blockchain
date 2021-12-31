@@ -101,11 +101,16 @@ export default function Buy() {
   let {
     user: { uid },
   } = useContext(AuthContext);
+  let userStorage = JSON.parse(localStorage.getItem("users"));
 
   const handleBuy = () => {
     const value = parseInt(document.getElementById("money").innerText);
-    axios.post(`http://localhost:8080/buy?uid=` + uid + `&value=` + value);
-    alert("Bạn đã mua " + value + " ETH");
+    userStorage.map((user) => {
+      if (user.uid === uid) {
+        axios.post(`http://localhost:8080/buy?uid=` + uid + `&value=` + value);
+      }
+    });
+    alert("Bạn đã mua " + value + " ETH ");
     navigate("/");
     setCash(0);
   };

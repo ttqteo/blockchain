@@ -1,25 +1,14 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthProvider";
 import { db } from "../firebase/config";
 import { collection } from "firebase/firestore";
 import { onSnapshot } from "firebase/firestore";
-import useFirestore from "../hooks/useFirestore";
 
 export const AssetContext = React.createContext();
 export default function AssetProvider({ children }) {
   let {
     user: { uid },
   } = useContext(AuthContext);
-
-  // const roomsCondition = useMemo(() => {
-  //   return {
-  //     fieldName: 'members',
-  //     operator: 'array-contains',
-  //     compareValue: uid,
-  //   };
-  // }, [uid]);
-
-  const data = useFirestore("users");
 
   let userStorage = JSON.parse(localStorage.getItem("users"));
   var assetListtemp = [];
@@ -44,7 +33,7 @@ export default function AssetProvider({ children }) {
         ...doc.data(),
         id: doc.id,
       }));
-      console.log("có thay đổi ở Fireabse");
+      // console.log("có thay đổi ở Fireabse")
       var assetListtemp = [];
       var activitytListtemp = [];
       data.map((doc) => {

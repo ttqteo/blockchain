@@ -56,6 +56,7 @@ export default function Login() {
         const user = result.user;
         const data = getAdditionalUserInfo(result);
         if (data?.isNewUser) {
+          console.log("new user");
           axios.post(`http://localhost:8080/signup?uid=` + user.uid);
           setDoc(doc(db, "users", user.uid), {
             uid: user.uid,

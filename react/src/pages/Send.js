@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { memo, useContext, useState } from "react";
 import styled from "styled-components";
 import { AutoComplete, Button, Input, Select } from "antd";
@@ -92,32 +93,57 @@ function Send() {
     user: { uid },
   } = useContext(AuthContext);
 
-  const coinCodeData = ["ETH", "BNB", "BTC", "ADA", "SOL", "USD"];
-  const [selectedCoin, setSelectedCoin] = useState(coinCodeData[0]);
+  let userStorage = JSON.parse(localStorage.getItem("users"));
+  const [selectedCoin, setSelectedCoin] = useState("ETH");
+  const [quantity, setQuantity] = useState(0);
+  const [isValid, setIsValid] = useState(true);
+
+  userStorage.map((user) => {
+    if (user.uid === uid) {
+      return user.asset.map((item) => {
+        if (item.code === selectedCoin) {
+          console.log(selectedCoin, " : ", item.quantity);
+          if (quantity > item.quantity) {
+            console.log("không thể gửi");
+            if (isValid === true) setIsValid(false);
+          } else {
+            console.log("có thể gửi");
+            if (isValid === false) setIsValid(true);
+          }
+        }
+      });
+    }
+  });
+
   const handleTransaction = () => {
     const receiver = document.getElementById("receiver").value;
-    const value = parseInt(document.getElementById("token").value);
-    console.log(receiver);
-    console.log(uid);
-    axios.post(
-      `http://localhost:8080/send?uid1=` +
-        uid +
-        `&uid2=` +
-        receiver +
-        `&token=` +
-        selectedCoin +
-        `&value=` +
-        value
-    );
-    alert(
-      "Bạn đã chuyển thành công " +
-        value +
-        " " +
-        selectedCoin +
-        " đến ví " +
-        receiver
-    );
-    navigate("/");
+    const value = parseFloat(document.getElementById("token").value);
+    userStorage.map((user) => {
+      if (user.uid === receiver) {
+        axios.post(
+          `http://localhost:8080/send?uid1=` +
+            uid +
+            `&uid2=` +
+            receiver +
+            `&token=` +
+            selectedCoin +
+            `&value=` +
+            value
+        );
+        alert(
+          "Bạn đã chuyển thành công " +
+            value +
+            " " +
+            selectedCoin +
+            " đến ví " +
+            receiver
+        );
+        navigate("/");
+      } else {
+        alert("Không tồn tại ví bạn muốn gửi");
+        navigate("/");
+      }
+    });
   };
 
   return (
@@ -206,14 +232,33 @@ function Send() {
             </Option>
           </Select>
           <AutoComplete
-            style={{ width: "65%" }}
+            style={{
+              width: "65%",
+              border: isValid === false ? "1px solid #ff0000" : "",
+            }}
             placeholder="Số lượng Token"
+            onChange={(e) => {
+              setQuantity(e);
+            }}
             options={[{ value: "10" }, { value: "100" }]}
             id="token"
           />
         </Input.Group>
+        <span style={isValid ? { color: "#0074dc" } : { color: "#ff0000" }}>
+          {selectedCoin} khả dụng:{" "}
+          {userStorage.map((user) => {
+            if (user.uid === uid) {
+              return user.asset.map((item) => {
+                if (item.code === selectedCoin) {
+                  return item.quantity;
+                }
+              });
+            }
+          })}
+        </span>
         <Button
           size="large"
+          disabled={isValid ? false : true}
           type="primary"
           shape="round"
           className="end-button"

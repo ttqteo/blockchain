@@ -546,8 +546,6 @@ public class CRUDService {
         if (token1.equals(tokenList[i])) index1 = i;
         if (token2.equals(tokenList[i])) index2 = i;
       }
-      Date date = new Date();
-      Timestamp ts = new Timestamp(date.getTime());
 
       crud = document.toObject(CRUD.class);
       Object asset = crud.getAsset();
@@ -558,7 +556,7 @@ public class CRUDService {
       JSONArray jsonArr = new JSONArray(string);
       String valueOld1 = jsonArr.getJSONObject(index1).getString("quantity");
       jsonArr.getJSONObject(index1).put("quantity", Float.parseFloat(valueOld1) - value);
-      Float swapValue = CurrencyConverter.CurrencyConverter(token1, token2, Float.parseFloat(valueOld1));
+      Float swapValue = CurrencyConverter.CurrencyConverter(token1, token2, value);
       String valueOld2 = jsonArr.getJSONObject(index2).getString("quantity");
       jsonArr.getJSONObject(index2).put("quantity", Float.parseFloat(valueOld2) + swapValue);
 
@@ -619,10 +617,10 @@ public class CRUDService {
         for(TransactionInput input: currentTransaction.getInputs()) {	
           tempOutput = tempUTXOs.get(input.getTransactionOutputId());
           
-          if(tempOutput == null || t != 0) {
-            System.out.println("#Referenced input on Transaction(" + t + ") is Missing");
-            return false;
-          }
+          // if(tempOutput == null || t != 0) {
+          //   System.out.println("#Referenced input on Transaction(" + t + ") is Missing");
+          //   return false;
+          // }
           
           // if(input.getUTXO().getValue() != tempOutput.getValue()) {
           //   System.out.println("#Referenced input Transaction(" + t + ") value is Invalid");

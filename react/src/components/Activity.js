@@ -106,7 +106,7 @@ export default function Activity({
         </span>
         <span className="value1">
           {type === "buy"
-            ? `$${value1} ETH`
+            ? `${value1} ETH`
             : type === "swap"
             ? `${value1} ${token1} = ${value2} ${token2}`
             : type === "send"
