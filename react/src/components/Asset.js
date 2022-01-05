@@ -66,8 +66,10 @@ export default function Asset({ quantity, code, changeCode }) {
   return (
     <Row>
       {listTokenoriginal.map(
-        (item) =>
-          item.name === code && <img src={item.logo} className="img" alt="" />
+        (item, index) =>
+          item.name === code && (
+            <img key={index} src={item.logo} className="img" alt="" />
+          )
       )}
       <div className="text">
         <div className="token">

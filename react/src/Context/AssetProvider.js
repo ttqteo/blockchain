@@ -13,12 +13,13 @@ export default function AssetProvider({ children }) {
   let userStorage = JSON.parse(localStorage.getItem("users"));
   var assetListtemp = [];
   var activitytListtemp = [];
-  userStorage.map((doc) => {
-    if (doc.uid === uid) {
-      assetListtemp = doc.asset;
-      activitytListtemp = doc.activity;
-    }
-  });
+  userStorage != null &&
+    userStorage.map((doc) => {
+      if (doc.uid === uid) {
+        assetListtemp = doc.asset;
+        activitytListtemp = doc.activity;
+      }
+    });
   const assetList = {
     list: assetListtemp,
     acti: activitytListtemp,

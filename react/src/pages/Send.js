@@ -139,9 +139,6 @@ function Send() {
             receiver
         );
         navigate("/");
-      } else {
-        alert("Không tồn tại ví bạn muốn gửi");
-        navigate("/");
       }
     });
   };
