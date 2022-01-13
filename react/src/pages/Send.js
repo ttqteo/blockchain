@@ -153,7 +153,7 @@ function Send() {
     const receiver = document.getElementById("receiver").value;
     for (var i = 0; i < userStorage.length; i++) {
       setIsUid(false);
-      if (userStorage[i].uid === receiver) {
+      if (userStorage[i].uid === receiver && userStorage[i].uid !== uid) {
         setIsUid(true);
         break;
       }
