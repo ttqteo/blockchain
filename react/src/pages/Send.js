@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/AuthProvider";
 import { listToken } from "../firebase/tokenList";
 import axios from "axios";
+import { doc } from "firebase/firestore";
 
 const { Option } = Select;
 
@@ -97,6 +98,7 @@ function Send() {
   const [selectedCoin, setSelectedCoin] = useState("ETH");
   const [quantity, setQuantity] = useState(0);
   const [isValid, setIsValid] = useState(true);
+  const [isUid, setIsUid] = useState(false);
 
   userStorage.map((user) => {
     if (user.uid === uid) {
@@ -118,29 +120,44 @@ function Send() {
   const handleTransaction = () => {
     const receiver = document.getElementById("receiver").value;
     const value = parseFloat(document.getElementById("token").value);
-    userStorage.map((user) => {
-      if (user.uid === receiver) {
-        axios.post(
-          `http://localhost:8080/send?uid1=` +
-            uid +
-            `&uid2=` +
-            receiver +
-            `&token=` +
-            selectedCoin +
-            `&value=` +
-            value
-        );
-        alert(
-          "Bạn đã chuyển thành công " +
-            value +
-            " " +
-            selectedCoin +
-            " đến ví " +
-            receiver
-        );
-        navigate("/");
+    if (isUid) {
+      userStorage.map((user) => {
+        if (user.uid === receiver) {
+          axios.post(
+            `http://localhost:8080/send?uid1=` +
+              uid +
+              `&uid2=` +
+              receiver +
+              `&token=` +
+              selectedCoin +
+              `&value=` +
+              value
+          );
+          alert(
+            "Bạn đã chuyển thành công " +
+              value +
+              " " +
+              selectedCoin +
+              " đến ví " +
+              receiver
+          );
+          navigate("/");
+        }
+      });
+    } else {
+      alert("Ví bạn nhập không tồn tại");
+    }
+  };
+
+  const checkUid = () => {
+    const receiver = document.getElementById("receiver").value;
+    for (var i = 0; i < userStorage.length; i++) {
+      setIsUid(false);
+      if (userStorage[i].uid === receiver) {
+        setIsUid(true);
+        break;
       }
-    });
+    }
   };
 
   return (
@@ -158,6 +175,8 @@ function Send() {
           id="receiver"
           allowClear
           size="large"
+          onChange={checkUid}
+          style={{ border: isUid === false ? "1px solid #ff0000" : "" }}
         />
         <Input.Group size="large" compact className="inputToken">
           <Select
