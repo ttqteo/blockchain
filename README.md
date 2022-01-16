@@ -21,10 +21,10 @@ Cần có:
 2. Cần có Spring Boot, Java, Maven để chạy được Project
 
 ### Dịch vụ (đồng ETH)
-#### Bước 1: 
+#### Bước 1: Đăng nhập (gồm 2 luồng)
 * `/signup&uid=xxx` -> tạo tài khoản mới 
 * `/signin`-> đăng nhập tài khoản đã có 
-#### Bước 2: (thực hiện chức năng mua-chuyển-đổi) 
+#### Bước 2: (thực hiện chức năng mua-chuyển-đổi, gồm 3 luồng) 
 * `/buy?uid=xxxx&value=yyy` 
 * `/send?uid1=xxx&uid2=yyy&token=token&value=value` 
 * `/swap?uid=xxx&token1=token1&value=value&token2=token2` 
@@ -41,7 +41,7 @@ Gõ cmd `npm start` để chạy ReactJS
 Mở [http://localhost:3000](http://localhost:3000) để xem giao diện trên trình duyệt.
 
 Giao diện UI chạy lần đầu sẽ gặp một vài lỗi không ý muốn. Lỗi này sẽ fix sau.
-Nếu muốn truy cập được... inbox.
+Nếu muốn truy cập được... liên hệ.
 
 ## Copyright
 (C) 2021. Belongs to group 16, Java developing - FETEL HCMUS.\
