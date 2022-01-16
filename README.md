@@ -1,5 +1,5 @@
 # Blockchain App with ReactJS, Firebase and Java
-Link deployed website: https://zen-lovelace-a38391.netlify.app/
+Link deployed website UI: https://zen-lovelace-a38391.netlify.app/
 
 ## Feature
 1. Only sign-in with Google Account (using Firebase Authentication)
@@ -8,6 +8,7 @@ Link deployed website: https://zen-lovelace-a38391.netlify.app/
 4. Create blockchain
 5. Transaction
 6. Buy USD, Send Token, Swap Token
+7. Available in Mobile, Tablet and Web
 
 # Hướng dẫn dùng thử Project Blockchain Beta (tiếng Việt)
 Project có tổng 2 thư mục, Back-End với ngôn ngữ Java (Spring Boot), Front-End với ngôn ngữ ReactJS \
@@ -24,7 +25,7 @@ Cần có:
 #### Bước 1: Đăng nhập (gồm 2 luồng)
 * `/signup&uid=xxx` -> tạo tài khoản mới 
 * `/signin`-> đăng nhập tài khoản đã có 
-#### Bước 2: (thực hiện chức năng mua-chuyển-đổi, gồm 3 luồng) 
+#### Bước 2: Thực hiện chức năng mua-chuyển-đổi (gồm 3 luồng) 
 * `/buy?uid=xxxx&value=yyy` 
 * `/send?uid1=xxx&uid2=yyy&token=token&value=value` 
 * `/swap?uid=xxx&token1=token1&value=value&token2=token2` 
@@ -42,6 +43,9 @@ Mở [http://localhost:3000](http://localhost:3000) để xem giao diện trên 
 
 Giao diện UI chạy lần đầu sẽ gặp một vài lỗi không ý muốn. Lỗi này sẽ fix sau.
 Nếu muốn truy cập được... liên hệ.
+
+## Tính năng thêm
+* Có thể chạy trên điện thoại với localhost
 
 ## Copyright
 (C) 2021. Belongs to group 16, Java developing - FETEL HCMUS.\
