@@ -1,5 +1,5 @@
 # Blockchain App with ReactJS, Firebase and Java
-Link deployed website UI: https://zen-lovelace-a38391.netlify.app/
+Link deployed website UI: https://zen-lovelace-a38391.netlify.app/ /
 Link demo: https://youtu.be/kZNuoszXHjw
 
 ## Feature
